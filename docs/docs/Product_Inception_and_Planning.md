@@ -14,7 +14,7 @@ _______________________________
 
 Jira / Azure DevOps URL:
 
-🚩 TEAM DECISION REQUIRED
+(https://swe-6733.atlassian.net/jira/software/projects/OUTTY/boards/1)
 
 ---
 
@@ -24,16 +24,16 @@ Jira / Azure DevOps URL:
 
 | Team Member | Scrum Role | Responsibilities |
 |------------|------------|-------------------|
-| | Scrum Master | Facilitates Scrum events, removes blockers, maintains process |
-| | Product Owner | Owns product vision and backlog priorities |
-| | Developer | Builds and tests features |
-| | Developer | Builds and tests features |
+| Joseph Pentecost | Scrum Master | Facilitates Scrum events, removes blockers, maintains process |
+| April Breedlove | Product Owner | Owns product vision and backlog priorities |
+| Antoine Davis | Developer | Builds and tests features |
+| Mekonnen Kindo | Developer | Builds and tests features |
 
 ---
 
 # 2. Team Collaboration
 
-🚩 TEAM DECISION REQUIRED
+
 
 Primary Communication Tool
 
@@ -42,7 +42,7 @@ Primary Communication Tool
 - Microsoft Teams
 - Other:
 
-Selected:
+Selected: Microsoft Teams
 
 _________________________
 
@@ -166,7 +166,7 @@ _________________________________________________
 | Authentication | |
 | UI Design | |
 | Hosting | |
-| Project Management | |
+| Project Management | Jira |
 | Source Control | GitHub |
 
 ---
