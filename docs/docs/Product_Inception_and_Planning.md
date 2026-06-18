@@ -8,7 +8,7 @@ Team Name: Group 2
 
 Project Name: Outty
 
-GitHub Repository:
+GitHub Repository: https://github.com/Adavi654/swe6733-group2-outty
 
 _______________________________
 
