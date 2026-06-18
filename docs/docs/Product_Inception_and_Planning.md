@@ -20,7 +20,6 @@ Jira / Azure DevOps URL:
 
 # 1. Team Roster
 
-🚩 TEAM DECISION REQUIRED
 
 | Team Member | Scrum Role | Responsibilities |
 |------------|------------|-------------------|
