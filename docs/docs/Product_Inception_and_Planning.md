@@ -21,12 +21,12 @@ Jira / Azure DevOps URL:
 # 1. Team Roster
 
 
-| Team Member | Scrum Role | Responsibilities |
-|------------|------------|-------------------|
-| Joseph Pentecost | Scrum Master | Facilitates Scrum events, removes blockers, maintains process |
-| April Breedlove | Product Owner | Owns product vision and backlog priorities |
-| Antoine Davis | Developer | Builds and tests features |
-| Mekonnen Kindo | Developer | Builds and tests features |
+| Team Member      | Scrum Role    | Responsibilities                                              |
+|------------------|---------------|---------------------------------------------------------------|
+| Joseph Pentecost | Scrum Master  | Facilitates Scrum events, removes blockers, maintains process |
+| April Breedlove  | Product Owner | Owns product vision and backlog priorities                    |
+| Antoine Davis    | Developer     | Builds and tests features                                     |
+| Mekonnen Kindo   | Developer     | Builds and tests features                                     |
 
 ---
 
