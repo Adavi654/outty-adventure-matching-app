@@ -49,7 +49,7 @@ _________________________
 
 Weekly Meeting Day
 
-🚩 TEAM DECISION REQUIRED
+Saturday (Weekly)
 
 _________________________
 
@@ -57,8 +57,7 @@ _________________________
 
 Weekly Meeting Time
 
-🚩 TEAM DECISION REQUIRED
-
+4:00pm ET
 _________________________
 
 ---
@@ -69,9 +68,9 @@ Daily Standup Method
 - Async text updates
 - Other
 
-🚩 TEAM DECISION REQUIRED
 
-Selected:
+
+Selected: Synchronous
 
 _________________________
 
