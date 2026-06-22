@@ -121,25 +121,6 @@ _________________________________________________
 
 ---
 
-## Target Users
-
-🚩 TEAM DECISION REQUIRED
-
-Examples:
-
-- Hikers
-- Campers
-- Climbers
-- Backpackers
-- Kayakers
-- Travelers
-
-Selected:
-
-_________________________________________________
-
----
-
 ## Stakeholders
 
 🚩 TEAM DECISION REQUIRED
