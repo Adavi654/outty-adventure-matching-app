@@ -22,8 +22,8 @@ Estimated using Fibonacci sequence:
 
 1, 2, 3, 5, 8, 13
 
-### 6. Independent
+### 5. Independent
 The story can be completed within a sprint.
 
-### 7. Understood
+### 6. Understood
 The development team understands the requirements.
