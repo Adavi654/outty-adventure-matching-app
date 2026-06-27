@@ -9,14 +9,6 @@ Team Name: Group 2
 
 Project Name: Outty
 
-GitHub Repository: https://github.com/Adavi654/swe6733-group2-outty
-
-_______________________________
-
-Jira / Azure DevOps URL:
-
-(https://swe-6733.atlassian.net/jira/software/projects/OUTTY/boards/1)
-
 ---
 
 # 1. Team Roster
