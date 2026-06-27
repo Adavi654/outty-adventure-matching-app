@@ -22,9 +22,6 @@ Estimated using Fibonacci sequence:
 
 1, 2, 3, 5, 8, 13
 
-### 5. Testable
-The story can be verified through testing.
-
 ### 6. Independent
 The story can be completed within a sprint.
 
