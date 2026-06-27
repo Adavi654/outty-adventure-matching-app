@@ -24,43 +24,32 @@ Project Name: Outty
 ---
 # 2. Team Collaboration
 
-Primary Communication Tool
+**Primary Communication Tool:**
 
-- Discord
-- Slack
-- Microsoft Teams
-- Other:
-
-Selected: Microsoft Teams
+Microsoft Teams
 
 _________________________
 
 ---
 
-Weekly Meeting Day
+**Weekly Meeting Day:**
 
-Saturday (Weekly)
+Saturday
 
 _________________________
 
 ---
 
-Weekly Meeting Time
+**Weekly Meeting Time:**
 
-4:00pm ET
+4:00pm EST
 _________________________
 
 ---
 
-Daily Standup Method
+**Daily Standup Method:**
 
-- Synchronous
-- Async text updates
-- Other
-
-
-
-Selected: Synchronous
+Asynchronous
 
 _________________________
 
@@ -80,7 +69,7 @@ _________________________
 | Stakeholder | Interest in Product |
 |------------|--------------------|
 | Adventure Seekers | The end users |
-| Product Owner | Represents the users and prioritizes the backlog|
+| Product Owner | Represents the users and prioritizes the backlog |
 | Development Team | Designs, builds, and tests the solution |
 | Scrum Master | Facilitates Scrum ceremonies and removes blockers |
 
@@ -88,16 +77,14 @@ _________________________
 
 # 5. Technology Stack
 
-🚩 TEAM DECISION REQUIRED
-
 | Component | Selected Technology |
 |----------|---------------------|
 | Frontend | React & Vite |
-| Backend | |
-| Database | |
-| Authentication | |
+| Backend | Springboot |
+| Database | PostgreSQL |
+| Authentication | Google Single Sign-on |
 | UI Design | Figma |
-| Hosting | |
+| Hosting | Render |
 | Project Management | Jira |
 | Source Control | GitHub |
 
@@ -105,27 +92,24 @@ _________________________
 
 # 6. AI Usage Disclosure
 
-🚩 TEAM DECISION REQUIRED
+---
+
+**AI Tools**
+
+- ChatGpt Codex & Google Gemini: Code generation, debugging, refactoring, test creation
 
 ---
 
-AI Tools
-
-- ChatGpt Codex: code generation, debugging, refactoring, test creation
-
-
----
-
-Validation Process
+**Validation Process**
 
 1. Read and Understand the Code
   - Ensure the developer understands what the AI-generated code does before using it.
-2. Validate against Acceptance cCiteria
+2. Validate Against Acceptance Criteria
   - Verify the solution satisfies the user story and all acceptance criteria.
 3. Test the Solution
-  - Execute the application and verify the feature works as expected
-  - Test both successful and basic failure/error scenarios
-4. Peer Review through GitHub Pull Requests
+  - Execute the application and verify the feature works as expected.
+  - Test both successful and basic failure/error scenarios.
+4. Peer Review Through GitHub Pull Requests
   - Another team member reviews the code for quality, correctness, readability, and adherence to project standards before approval.
 
 ____________________________________
