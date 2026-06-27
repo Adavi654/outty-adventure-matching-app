@@ -76,7 +76,6 @@ _________________________
 
 # 4. Stakeholders
 
-🚩 TEAM DECISION REQUIRED
 
 | Stakeholder | Interest in Product |
 |------------|--------------------|
@@ -105,6 +104,8 @@ _________________________
 ---
 
 # 6. AI Usage Disclosure
+
+🚩 TEAM DECISION REQUIRED
 
 ---
 
