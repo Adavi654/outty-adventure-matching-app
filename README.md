@@ -67,9 +67,9 @@ _________________________
 # 3. Documentation
 
 - Product Vision: product-vision.md
-- Backlog Prioritization Rationale: (./docs/backlog-ordering-rationale.md)
-- Definition of Ready: (./docs/definition-of-ready.md)
-- Product Backlog: (./docs/product-backlog.md)
+- Backlog Prioritization Rationale: backlog-ordering-rationale.md
+- Definition of Ready: definition-of-ready.md
+- Product Backlog: product-backlog.md
 - Product Backlog (Jira): https://swe-6733.atlassian.net/jira/software/projects/OUTTY/boards/1/backlog?atlOrigin=eyJpIjoiNGE4Y2RmNWRlNThiNDYwOTkyNmU3NjMwNjMxNTQ4MTUiLCJwIjoiaiJ9
 
 ---
@@ -80,10 +80,10 @@ _________________________
 
 | Stakeholder | Interest in Product |
 |------------|--------------------|
-| | |
-| | |
-| | |
-| | |
+| Adventure Seekers | The end users |
+| Product Owner | Represents the users and prioritizes the backlog|
+| Development Team | Designs, builds, and tests the solution |
+| Scrum Master | Facilitates Scrum ceremonies and removes blockers |
 
 ---
 
@@ -97,7 +97,7 @@ _________________________
 | Backend | |
 | Database | |
 | Authentication | |
-| UI Design | |
+| UI Design | Figma |
 | Hosting | |
 | Project Management | Jira |
 | Source Control | GitHub |
@@ -117,9 +117,14 @@ AI Tools
 
 Validation Process
 
-- Read the code before usage
-- Compare against story acceptance criteria
-- Testing 
-- Peer Review through GitHub Pull Requests
+1. Read and Understand the Code
+  - Ensure the developer understands what the AI-generated code does before using it.
+2. Validate against Acceptance cCiteria
+  - Verify the solution satisfies the user story and all acceptance criteria.
+3. Test the Solution
+  - Execute the application and verify the feature works as expected
+  - Test both successful and basic failure/error scenarios
+4. Peer Review through GitHub Pull Requests
+  - Another team member reviews the code for quality, correctness, readability, and adherence to project standards before approval.
 
 ____________________________________
