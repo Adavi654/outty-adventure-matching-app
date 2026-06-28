@@ -1,5 +1,5 @@
 # outty-adventure-matching-app
-Outty is an outdoor adventure matching app developed by Group 2 for SWE 6733 using Agile Scrum practices.
+Outty is an outdoor adventure matching app developed by The Trailblazers (Group 2) for SWE 6733 using Agile Scrum practices.
 
 ## Course Information
 
