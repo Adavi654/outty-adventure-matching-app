@@ -102,14 +102,14 @@ _________________________
 
 **Validation Process**
 
-1. Read and Understand the Code
+1. Read and understand the code:
   - Ensure the developer understands what the AI-generated code does before using it.
-2. Validate Against Acceptance Criteria
-  - Verify the solution satisfies the user story and all acceptance criteria.
-3. Test the Solution
+2. Validate against acceptance criteria:
+  - Verify that the solution satisfies the user story and all acceptance criteria.
+3. Test the solution:
   - Execute the application and verify the feature works as expected.
   - Test both successful and basic failure/error scenarios.
-4. Peer Review Through GitHub Pull Requests
+4. Peer review through GitHub pull requests:
   - Another team member reviews the code for quality, correctness, readability, and adherence to project standards before approval.
 
 ____________________________________
