@@ -11,8 +11,8 @@ A clear and concise description of the feature.
 Must follow the format:
 
 As a _**user**_,
-I want _**goal**_,
-so that _**benefit**_.
+I want (_**goal**_),
+so that (_**benefit**_).
 
 ### 3. Additional Details
 Acceptance criteria, technical notes, assumptions, or business rules.
