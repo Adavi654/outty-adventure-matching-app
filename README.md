@@ -96,7 +96,7 @@ _________________________
 
 **AI Tools**
 
-- ChatGpt Codex & Google Gemini: Code generation, debugging, refactoring, test creation
+- ChatGPT Codex & Google Gemini: Code generation, debugging, refactoring, test creation
 
 ---
 
