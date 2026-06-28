@@ -13,7 +13,7 @@ As a user, I want to create a profile with my adventures listed, so that others 
 As a user, I want to edit my profile, so that my information is up to date.
 
 ## PBI-5 Choose Adventure Interests
-As a user, I want to choose adventure activities That I’m interested in, so that I can be matched with like-minded people.
+As a user, I want to choose adventure activities that I’m interested in, so that I can be matched with like-minded people.
 
 ## PBI-6 Set Skill Level 
 As a user, I want to set my level of experience on my preferred activities, so that I can find compatible partners.
