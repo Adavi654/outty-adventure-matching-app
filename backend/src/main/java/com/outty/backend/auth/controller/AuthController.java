@@ -1,6 +1,8 @@
 package com.outty.backend.auth.controller;
 
+import com.outty.backend.auth.dto.request.LoginRequest;
 import com.outty.backend.auth.dto.request.RegisterRequest;
+import com.outty.backend.auth.dto.response.LoginResponse;
 import com.outty.backend.auth.dto.response.RegisterResponse;
 import com.outty.backend.auth.service.AuthService;
 import jakarta.validation.Valid;
@@ -21,7 +23,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> response(
+    public ResponseEntity<RegisterResponse> register(
             @Valid @RequestBody RegisterRequest request
     ) {
         RegisterResponse response = authService.register(request);
@@ -29,5 +31,14 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request) {
+
+        return ResponseEntity.ok(
+                authService.login(request)
+        );
     }
 }
