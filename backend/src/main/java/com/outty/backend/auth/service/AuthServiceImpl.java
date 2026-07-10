@@ -6,6 +6,7 @@ import com.outty.backend.auth.entity.User;
 import com.outty.backend.auth.entity.enums.Role;
 import com.outty.backend.auth.mapper.UserMapper;
 import com.outty.backend.auth.repository.UserRepository;
+import com.outty.backend.common.exception.EmailAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public RegisterResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("Email is already registered");
+            throw new EmailAlreadyExistsException("Email is already registered");
         }
 
         User user = User.builder()
