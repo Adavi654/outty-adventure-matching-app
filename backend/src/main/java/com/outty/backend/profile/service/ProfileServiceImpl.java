@@ -4,7 +4,8 @@ import com.outty.backend.auth.entity.User;
 import com.outty.backend.auth.repository.UserRepository;
 import com.outty.backend.common.exception.ProfileAlreadyExistsException;
 import com.outty.backend.common.exception.UserNotFoundException;
-import com.outty.backend.profile.dto.request.CreateProfileRequest;
+import com.outty.backend.common.exception.ProfileNotFoundException;
+import com.outty.backend.profile.dto.request.ProfileRequest;
 import com.outty.backend.profile.dto.response.ProfileResponse;
 import com.outty.backend.profile.entity.Profile;
 import com.outty.backend.profile.mapper.ProfileMapper;
@@ -20,7 +21,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
 
     @Override
-    public ProfileResponse createProfile(Long userId, CreateProfileRequest request) {
+    public ProfileResponse createProfile(Long userId, ProfileRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -43,5 +44,40 @@ public class ProfileServiceImpl implements ProfileService {
         Profile savedProfile = profileRepository.save(profile);
 
         return ProfileMapper.toProfileResponse(savedProfile);
+    }
+
+    @Override
+    public ProfileResponse getProfile(Long userId) {
+        Profile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ProfileNotFoundException("Profile not found"));
+
+        return ProfileMapper.toProfileResponse(profile);
+    }
+
+    @Override
+    public ProfileResponse updateProfile(Long userId, ProfileRequest request) {
+        Profile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ProfileNotFoundException("Profile not found"));
+
+        profile.setCity(request.city());
+        profile.setState(request.state());
+        profile.setCountry(request.country());
+        profile.setGender(request.gender());
+        profile.setBirthDate(request.birthDate());
+        profile.setBio(request.bio());
+        profile.setInterestedIn(request.interestedIn());
+        profile.setRelationshipGoal(request.relationshipGoal());
+
+        Profile updated = profileRepository.save(profile);
+
+        return ProfileMapper.toProfileResponse(updated);
+    }
+
+    @Override
+    public void deleteProfile(Long userId) {
+        Profile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ProfileNotFoundException("Profile not found"));
+
+        profileRepository.delete(profile);
     }
 }

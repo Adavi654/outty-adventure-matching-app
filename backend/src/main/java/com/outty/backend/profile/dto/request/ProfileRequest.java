@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public record CreateProfileRequest(
+public record ProfileRequest(
         @NotBlank(message = "City is required")
         @Size(max = 100, message = "City must be at most 100 characters")
         String city,
