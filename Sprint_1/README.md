@@ -8,9 +8,9 @@ _________________________
 
 Because this was our team's first sprint, we did not have a historical velocity to use when estimating our sprint capacity. As a result, we based our forecast on the work we planned for the sprint rather than on past performance.
 
-After estimating the effort for each user story using story points, we divided the 12 user stories across our three planned sprints. We intentionally scheduled the four user stories with the lowest combined effort in the first sprint, resulting in a forecast of 21 story points for Sprint 1. This conservative estimate allowed us to establish an initial team velocity while reducing the risk of overcommitting during our first iteration.
+After estimating the effort for each user story using story points, we divided the 12 user stories across our three sprints. We intentionally scheduled the four user stories with the lowest combined effort in the first sprint, resulting in a forecast of 21 story points for Sprint 1. This conservative estimate allowed us to establish an initial team velocity while reducing the risk of overcommitting during our first iteration.
 
-At the end of the sprint, we planned to compare our completed story points with this forecast to establish a baseline velocity that would inform planning for the remaining sprints.
+At the end of the sprint, we planned to compare our completed story points with this forecast to establish a baseline velocity that would assist us in planning for the remaining sprints.
 
 _________________________
 
