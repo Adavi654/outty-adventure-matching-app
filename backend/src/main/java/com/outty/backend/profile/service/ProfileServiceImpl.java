@@ -30,8 +30,14 @@ public class ProfileServiceImpl implements ProfileService {
 
         Profile profile = Profile.builder()
                 .user(user)
-                .displayName(request.displayName())
-                .location(request.location())
+                .city(request.city())
+                .state(request.state())
+                .country(request.country())
+                .gender(request.gender())
+                .birthDate(request.birthDate())
+                .bio(request.bio())
+                .interestedIn(request.interestedIn())
+                .relationshipGoal(request.relationshipGoal())
                 .build();
 
         Profile savedProfile = profileRepository.save(profile);

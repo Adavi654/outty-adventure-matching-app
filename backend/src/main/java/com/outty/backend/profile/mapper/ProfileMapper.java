@@ -11,8 +11,14 @@ public class ProfileMapper {
         return new ProfileResponse(
                 profile.getId(),
                 profile.getUser().getId(),
-                profile.getDisplayName(),
-                profile.getLocation(),
+                profile.getCity(),
+                profile.getState(),
+                profile.getCountry(),
+                profile.getGender(),
+                profile.getBirthDate(),
+                profile.getBio(),
+                profile.getInterestedIn(),
+                profile.getRelationshipGoal(),
                 profile.getCreatedAt(),
                 profile.getUpdatedAt()
         );
