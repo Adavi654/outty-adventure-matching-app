@@ -6,12 +6,18 @@ _________________________
 
 # 1. Forecast
 
-As a new team, we do not have an established velocity to estimate how many story points that we can complete within a given sprint. However, based on the fact that we had 12 user stories, and because we had three sprints to complete, we opted to split the user stories into thirds, assigning four of them to our first sprint.
+Because this was our team's first sprint, we did not have a historical velocity to use when estimating our sprint capacity. As a result, we based our forecast on the work we planned for the sprint rather than on past performance.
 
-This worked out well, as the first set of stories had the lowest estimated story point count at 21 points. Because of this, we used our lightest sprint to determine how much velocity we have based on our pacing. This helped us to gauge whether or not our two remaining sprints can be realistically achieved with the stories and their respective story points that we have remaining.
+After estimating the effort for each user story using story points, we divided the 12 user stories across our three planned sprints. We intentionally scheduled the four user stories with the lowest combined effort in the first sprint, resulting in a forecast of 21 story points for Sprint 1. This conservative estimate allowed us to establish an initial team velocity while reducing the risk of overcommitting during our first iteration.
+
+At the end of the sprint, we planned to compare our completed story points with this forecast to establish a baseline velocity that would inform planning for the remaining sprints.
 
 _________________________
 
 # 2. Documentation
 
-- 
+- Story Tasks, Kanban Board, and Burndown Chart (Jira): swe-6733.atlassian.net/jira/software/projects/OUTTY/boards/1
+- Annotated Scrum Evidence: In Git repository under Sprint_1/Annotated_Scrum
+- Mobbing Evidence: In Git repository under Sprint_1/Mobbing
+- Sprint Review: In Git repository under Sprint_1/Sprint_Review
+- Passed BDD and Unit Tests: In Git repository under Sprint_1/Passed_Tests
