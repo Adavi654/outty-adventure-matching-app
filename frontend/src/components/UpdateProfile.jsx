@@ -3,7 +3,7 @@ import ProfileForm from './ProfileForm'
 import { getProfile, updateProfile } from '../services/profileApi'
 
 const userId = 1
-const token = 'mock-jwt-token'
+const token = null
 
 function UpdateProfile() {
   const [profile, setProfile] = useState(null)

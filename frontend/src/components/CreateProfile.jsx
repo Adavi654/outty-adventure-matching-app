@@ -3,7 +3,7 @@ import { createProfile } from '../services/profileApi'
 
 function CreateProfile() {
   const handleCreateProfile = async (formData) => {
-    await createProfile(1, formData, 'mock-jwt-token')
+    await createProfile(1, formData, null)
   }
 
   return (
