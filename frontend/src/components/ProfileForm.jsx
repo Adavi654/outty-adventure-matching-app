@@ -1,18 +1,28 @@
-import { useState } from 'react'
-import { createProfile } from '../services/profileApi'
+import { useEffect, useState } from 'react'
 
-function ProfileForm() {
-  const [formData, setFormData] = useState({
-    city: '',
-    state: '',
-    country: '',
-    gender: '',
-    birthDate: '',
-    bio: '',
-    interestedIn: '',
-    relationshipGoal: '',
-  })
+const EMPTY_FORM_VALUES = {
+  city: '',
+  state: '',
+  country: '',
+  gender: '',
+  birthDate: '',
+  bio: '',
+  interestedIn: '',
+  relationshipGoal: '',
+}
+
+function ProfileForm({
+  mode = 'create',
+  initialValues = EMPTY_FORM_VALUES,
+  onSubmit,
+  isLoading = false,
+}) {
+  const [formData, setFormData] = useState(initialValues)
   const [statusMessage, setStatusMessage] = useState('')
+
+  useEffect(() => {
+    setFormData(initialValues)
+  }, [initialValues])
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -27,17 +37,23 @@ function ProfileForm() {
     setStatusMessage('')
 
     try {
-      const response = await createProfile(1, formData, 'mock-jwt-token')
+      await onSubmit(formData)
 
-      if (response.success) {
-        setStatusMessage('Profile created successfully.')
+      if (mode === 'update') {
+        setStatusMessage('Profile updated successfully.')
       } else {
-        setStatusMessage('Unable to create profile.')
+        setStatusMessage('Profile created successfully.')
       }
     } catch {
       setStatusMessage('Unable to create profile.')
     }
   }
+
+  const buttonText = isLoading
+    ? 'Saving...'
+    : mode === 'update'
+      ? 'Save Changes'
+      : 'Save Profile'
 
   return (
     <form className="profile-form" onSubmit={handleSubmit}>
@@ -122,9 +138,9 @@ function ProfileForm() {
           onChange={handleChange}
         >
           <option value="">Select interest</option>
-          <option value="Friendships">Friendships</option>
-          <option value="Relationships">Relationships</option>
-          <option value="Both">Both</option>
+          <option value="FRIENDSHIPS">Friendships</option>
+          <option value="RELATIONSHIPS">Relationships</option>
+          <option value="BOTH">Both</option>
         </select>
       </div>
 
@@ -139,8 +155,12 @@ function ProfileForm() {
         />
       </div>
 
-      <button className="save-profile-button" type="submit">
-        Save Profile
+      <button
+        className="save-profile-button"
+        type="submit"
+        disabled={isLoading}
+      >
+        {buttonText}
       </button>
 
       {statusMessage && <p>{statusMessage}</p>}

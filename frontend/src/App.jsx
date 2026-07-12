@@ -1,12 +1,34 @@
+import { useState } from 'react'
 import './App.css'
-import ProfileForm from './components/ProfileForm'
+import CreateProfile from './components/CreateProfile'
+import UpdateProfile from './components/UpdateProfile'
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('create')
+
   return (
     <div>
-      <h1>Create Profile</h1>
-      <p>Welcome to Outty! Complete your profile below.</p>
-      <ProfileForm />
+      <header>
+        <h1>Outty Adventure Matching</h1>
+        <nav>
+          <button
+            type="button"
+            className={currentPage === 'create' ? 'active' : ''}
+            onClick={() => setCurrentPage('create')}
+          >
+            Create Profile
+          </button>
+          <button
+            type="button"
+            className={currentPage === 'update' ? 'active' : ''}
+            onClick={() => setCurrentPage('update')}
+          >
+            Update Profile
+          </button>
+        </nav>
+      </header>
+
+      {currentPage === 'create' ? <CreateProfile /> : <UpdateProfile />}
     </div>
   )
 }
