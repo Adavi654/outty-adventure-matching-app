@@ -2,6 +2,9 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1';
+
 export default function LoginPage() {
     const navigate = useNavigate();
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -14,7 +17,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('http://localhost:8080/api/v1/auth/login', credentials);
+        const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials);
         
         const token = response.data.token;
         localStorage.setItem('authToken', token);
