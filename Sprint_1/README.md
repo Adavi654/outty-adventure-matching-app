@@ -16,7 +16,8 @@ _________________________
 
 # 2. Documentation
 
-- Story Tasks, Kanban Board, and Burndown Chart (Jira): swe-6733.atlassian.net/jira/software/projects/OUTTY/boards/1
+- Story Tasks and Kanban Board (Jira): swe-6733.atlassian.net/jira/software/projects/OUTTY/boards/1
+- Burndown Chart (Jira): https://swe-6733.atlassian.net/jira/dashboards/10001
 - Annotated Scrum Evidence: In Git repository under Sprint_1/Annotated_Scrum
 - Mobbing Evidence: In Git repository under Sprint_1/Mobbing
 - Sprint Review: In Git repository under Sprint_1/Sprint_Review
