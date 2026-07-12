@@ -1,33 +1,53 @@
-// import "./App.css";
+import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import './App.css'
+import LoginPage from './components/LoginPage'
+import CreateProfile from './components/CreateProfile'
+import UpdateProfile from './components/UpdateProfile'
 
-// import ProfileForm from "./components/ProfileForm";
+function ProfilePages() {
+  const [currentPage, setCurrentPage] = useState('create')
 
-// function App() {
-//   return (
-//     <div>
-//       <h1>Create Profile</h1>
-//       <p>Welcome to Outty! Complete your profile below.</p>
+  return (
+    <div>
+      <header>
+        <h1>Outty Adventure Matching</h1>
 
-//       <ProfileForm />
-//     </div>
-//   );
-// }
+        <nav>
+          <button
+            type="button"
+            className={currentPage === 'create' ? 'active' : ''}
+            onClick={() => setCurrentPage('create')}
+          >
+            Create Profile
+          </button>
 
-// export default App;
+          <button
+            type="button"
+            className={currentPage === 'update' ? 'active' : ''}
+            onClick={() => setCurrentPage('update')}
+          >
+            Update Profile
+          </button>
+        </nav>
+      </header>
 
-import { Routes, Route } from "react-router-dom";
-import RegisterForm from "./components/RegisterForm";
-//import Login from "./components/Login";
-import ProfileForm from "./components/ProfileForm";
+      {currentPage === 'create' ? <CreateProfile /> : <UpdateProfile />}
+    </div>
+  )
+}
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<RegisterForm />} />
-      {/* <Route path="/login" element={<Login />} /> */}
-      <Route path="/profile" element={<ProfileForm />} />
-    </Routes>
-  );
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/profile" element={<ProfilePages />} />
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </Router>
+  )
 }
 
-export default App;
+export default App

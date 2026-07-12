@@ -1,8 +1,53 @@
-export async function createProfile(userId, profileData, token) {
-  console.log({ userId, profileData, token })
+const API_BASE_URL = 'http://localhost:8080/api/v1'
 
-  return Promise.resolve({
-    success: true,
-    message: 'Mock profile created',
+function buildHeaders(token, includeJson = false) {
+  const headers = {}
+
+  if (includeJson) {
+    headers['Content-Type'] = 'application/json'
+  }
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
+  return headers
+}
+
+async function handleResponse(response) {
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(errorText)
+  }
+
+  return response.json()
+}
+
+export async function createProfile(userId, profileData, token) {
+  const response = await fetch(`${API_BASE_URL}/users/${userId}/profile`, {
+    method: 'POST',
+    headers: buildHeaders(token, true),
+    body: JSON.stringify(profileData),
   })
+
+  return handleResponse(response)
+}
+
+export async function getProfile(userId, token) {
+  const response = await fetch(`${API_BASE_URL}/users/${userId}/profile`, {
+    method: 'GET',
+    headers: buildHeaders(token),
+  })
+
+  return handleResponse(response)
+}
+
+export async function updateProfile(userId, profileData, token) {
+  const response = await fetch(`${API_BASE_URL}/users/${userId}/profile`, {
+    method: 'PUT',
+    headers: buildHeaders(token, true),
+    body: JSON.stringify(profileData),
+  })
+
+  return handleResponse(response)
 }
