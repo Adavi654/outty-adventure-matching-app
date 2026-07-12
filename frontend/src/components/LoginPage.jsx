@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -40,6 +40,9 @@ export default function LoginPage() {
         </div>
         <button type="submit">Log In</button>
       </form>
+      <p>
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </div>
   );
 }

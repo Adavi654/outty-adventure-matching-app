@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import './App.css'
 import LoginPage from './components/LoginPage'
+import RegisterForm from './components/RegisterForm'
 import CreateProfile from './components/CreateProfile'
 import UpdateProfile from './components/UpdateProfile'
 
@@ -39,14 +40,13 @@ function ProfilePages() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/profile" element={<ProfilePages />} />
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="*" element={<Navigate to="/login" />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/register" element={<RegisterForm />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/profile" element={<ProfilePages />} />
+      <Route path="/" element={<Navigate to="/register" />} />
+      <Route path="*" element={<Navigate to="/register" />} />
+    </Routes>
   )
 }
 
