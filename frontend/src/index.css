@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&display=swap');
+
+:root {
+  --text: #3d4a45;
+  --text-h: #1a2e28;
+  --text-muted: #5f6f68;
+  --bg: #eef3f0;
+  --bg-accent: #e2ebe6;
+  --card-bg: #ffffff;
+  --border: #c5d2cb;
+  --border-focus: #2f6f5e;
+  --accent: #2f6f5e;
+  --accent-hover: #245749;
+  --field-bg: #f7faf8;
+  --shadow: 0 12px 32px rgba(26, 46, 40, 0.08);
+
+  --sans: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --heading: 'Outfit', 'Segoe UI', sans-serif;
+
+  font: 16px/1.5 var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background:
+    radial-gradient(ellipse at top, var(--bg-accent) 0%, transparent 55%),
+    var(--bg);
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  text-align: left;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 2rem;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  :root {
+    font-size: 15px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  #root {
+    padding: 16px 12px;
+    justify-content: flex-start;
+  }
+}
