@@ -48,8 +48,7 @@ public class LoginSteps {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private ResultActions loginResult;
 
