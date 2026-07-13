@@ -21,6 +21,7 @@ export default function LoginPage() {
         
         const token = response.data.token;
         localStorage.setItem('authToken', token);
+        localStorage.setItem('userId', response.data.userId);
         
         navigate('/profile');
     } catch (err) {

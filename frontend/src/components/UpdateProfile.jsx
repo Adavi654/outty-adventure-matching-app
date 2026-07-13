@@ -2,15 +2,19 @@ import { useEffect, useState } from 'react'
 import ProfileForm from './ProfileForm'
 import { getProfile, updateProfile } from '../services/profileApi'
 
-const userId = 1
-const token = null
-
 function UpdateProfile() {
+  const userId = localStorage.getItem('userId')
+  const token = localStorage.getItem('authToken')
   const [profile, setProfile] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (!userId) {
+      setIsLoading(false)
+      return
+    }
+
     const loadProfile = async () => {
       setIsLoading(true)
       setError(null)
@@ -26,7 +30,7 @@ function UpdateProfile() {
     }
 
     loadProfile()
-  }, [])
+  }, [userId, token])
 
   const handleUpdateProfile = async (formData) => {
     setIsLoading(true)
@@ -44,17 +48,22 @@ function UpdateProfile() {
   return (
     <div>
       <h1>Update Profile</h1>
-      <p>Review and update your profile information.</p>
-
-      {isLoading && !profile && <p>Loading profile...</p>}
-      {error && <p>{error}</p>}
-      {profile && (
-        <ProfileForm
-          mode="update"
-          initialValues={profile}
-          onSubmit={handleUpdateProfile}
-          isLoading={isLoading}
-        />
+      {!userId ? (
+        <p>Unable to identify the logged-in user. Please log in again.</p>
+      ) : (
+        <>
+          <p>Review and update your profile information.</p>
+          {isLoading && !profile && <p>Loading profile...</p>}
+          {error && <p>{error}</p>}
+          {profile && (
+            <ProfileForm
+              mode="update"
+              initialValues={profile}
+              onSubmit={handleUpdateProfile}
+              isLoading={isLoading}
+            />
+          )}
+        </>
       )}
     </div>
   )
