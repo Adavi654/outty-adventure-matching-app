@@ -1,4 +1,4 @@
-##Sprint 1 Review
+Sprint 1 Review
 
 During the sprint review, we discussed the implementation of each user story and how they turned out via a demo.
 We also discussed what went well during this past sprint, what went poorly, and what we could improve upon for the next.
