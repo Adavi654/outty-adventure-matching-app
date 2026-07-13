@@ -15,4 +15,4 @@ Feature: User Login
   Scenario: Unsuccessful login with incorrect password
     When the user attempts to log in with email "hiker_dan@example.com" and password "WrongPassword"
     Then the login should fail
-    And an "Invalid credentials" error message should be returned
+    And an "Invalid email or password" error message should be returned

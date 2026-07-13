@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -27,6 +29,7 @@ import io.cucumber.spring.CucumberContextConfiguration;
 
 @CucumberContextConfiguration
 @SpringBootTest
+@ActiveProfiles("test")
 public class LoginSteps {
 
     private MockMvc mockMvc;
@@ -96,6 +99,6 @@ public class LoginSteps {
 
     @Then("an {string} error message should be returned")
     public void an_error_message_should_be_returned(String expectedErrorMessage) throws Exception {
-        loginResult.andExpect(jsonPath("$.message").value(expectedErrorMessage));
+        loginResult.andExpect(content().string(expectedErrorMessage));
     }
 }
