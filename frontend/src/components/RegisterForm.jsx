@@ -12,6 +12,7 @@ function RegisterForm() {
   });
 
   const [statusMessage, setStatusMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -24,12 +25,13 @@ function RegisterForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
     setStatusMessage("");
 
     try {
-      const response = await registerUser(formData);
+      await registerUser(formData);
 
-      setStatusMessage(response.message || "Registration successful.");
+      setStatusMessage("Registration successful! Redirecting to login...");
 
       setFormData({
         firstName: "",
@@ -38,11 +40,16 @@ function RegisterForm() {
         password: "",
       });
 
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
       setStatusMessage(
-        error.response?.data?.message || error.message || "Unable to register.",
+        error.response?.data?.message ||
+          error.message ||
+          "Unable to register. Please try again.",
       );
+      setIsSubmitting(false);
     }
   };
 
@@ -99,8 +106,12 @@ function RegisterForm() {
             />
           </div>
 
-          <button className="register-button" type="submit">
-            Register
+          <button
+            className="register-button"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Creating account..." : "Register"}
           </button>
 
           {statusMessage && <p className="status-message">{statusMessage}</p>}

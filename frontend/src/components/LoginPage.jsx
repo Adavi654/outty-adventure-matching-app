@@ -9,6 +9,8 @@ export default function LoginPage() {
     const navigate = useNavigate();
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
+    const [statusMessage, setStatusMessage] = useState('');
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -16,6 +18,9 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoggingIn(true);
+    setError('');
+    setStatusMessage('');
     try {
         const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials);
         
@@ -23,9 +28,18 @@ export default function LoginPage() {
         localStorage.setItem('authToken', token);
         localStorage.setItem('userId', response.data.userId);
         
-        navigate('/profile');
+        setStatusMessage('Login successful! Loading your profile...');
+        setTimeout(() => {
+          navigate('/profile');
+        }, 1000);
     } catch (err) {
-        setError('Invalid email or password');
+        setError(
+          err.response?.data?.message ||
+            err.response?.data ||
+            err.message ||
+            'Unable to log in. Please try again.'
+        );
+        setIsLoggingIn(false);
     }
   };
 
@@ -33,6 +47,10 @@ export default function LoginPage() {
     <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc' }}>
       <h2>Outdoor Matchmaker Login</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      {statusMessage && <p>{statusMessage}</p>}
+      {isLoggingIn && (
+        <p>Please wait. The server may take a moment to respond.</p>
+      )}
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>
@@ -42,7 +60,9 @@ export default function LoginPage() {
           <label>Password:</label>
           <input type="password" name="password" value={credentials.password} onChange={handleChange} required />
         </div>
-        <button type="submit">Log In</button>
+        <button type="submit" disabled={isLoggingIn}>
+          {isLoggingIn ? 'Logging in...' : 'Log In'}
+        </button>
       </form>
       <p>
         Don't have an account? <Link to="/register">Register</Link>
