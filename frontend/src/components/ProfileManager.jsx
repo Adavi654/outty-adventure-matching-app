@@ -221,10 +221,11 @@ function ProfileManager() {
             </section>
           )}
 
+          <Link className="matches-cta" to="/matches">
+            Find Matches
+          </Link>
+
           <div className="profile-view-actions">
-            <Link className="matches-link" to="/matches">
-              Find Matches
-            </Link>
             <button onClick={() => setIsEditing(true)}>Edit Profile</button>
           </div>
         </div>
