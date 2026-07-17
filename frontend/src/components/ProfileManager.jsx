@@ -70,11 +70,9 @@ function ProfileManager() {
       </p>
 
       {hasProfile && (
-        <p>
-          <Link className="matches-link" to="/matches">
-            Find Matches
-          </Link>
-        </p>
+        <Link className="matches-cta" to="/matches">
+          View Potential Matches
+        </Link>
       )}
 
       {isLoading && !profile ? (
