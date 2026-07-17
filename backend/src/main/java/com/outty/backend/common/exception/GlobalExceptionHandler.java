@@ -44,6 +44,15 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
+    @ExceptionHandler(PotentialMatchUnavailableException.class)
+    public ResponseEntity<String> handlePotentialMatchUnavailable(
+            PotentialMatchUnavailableException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationErrors(
             MethodArgumentNotValidException ex) {
