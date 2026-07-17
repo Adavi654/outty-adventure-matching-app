@@ -8,25 +8,22 @@ function ProfileManager() {
 
   const [profile, setProfile] = useState(null)
   const [hasProfile, setHasProfile] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(Boolean(userId))
 
   useEffect(() => {
     if (!userId) {
-      setIsLoading(false)
       return
     }
 
     const loadProfile = async () => {
       setIsLoading(true)
-      setError(null)
       try {
         const existingProfile = await getProfile(userId, token)
         if (existingProfile) {
           setProfile(existingProfile)
           setHasProfile(true)
         }
-      } catch (err) {
+      } catch {
         setHasProfile(false)
       } finally {
         setIsLoading(false)
@@ -47,8 +44,6 @@ function ProfileManager() {
         setProfile(newProfile)
         setHasProfile(true)
       }
-    } catch (err) {
-      throw err
     } finally {
       setIsLoading(false)
     }
@@ -77,6 +72,7 @@ function ProfileManager() {
         <p>Loading profile details...</p>
       ) : (
         <ProfileForm
+          key={hasProfile ? 'update' : 'create'}
           mode={hasProfile ? 'update' : 'create'}
           initialValues={profile || undefined}
           onSubmit={handleSaveProfile}

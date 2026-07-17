@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const EMPTY_FORM_VALUES = {
   city: '',
@@ -19,10 +19,6 @@ function ProfileForm({
 }) {
   const [formData, setFormData] = useState(initialValues)
   const [statusMessage, setStatusMessage] = useState('')
-
-  useEffect(() => {
-    setFormData(initialValues)
-  }, [initialValues])
 
   const handleChange = (event) => {
     const { name, value } = event.target
