@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public record PotentialMatchResponse(
         Long userId,
         String firstName,
+        String photoUrl,
         String city,
         String state,
         String country,

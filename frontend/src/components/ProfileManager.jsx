@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import ProfileForm from './ProfileForm'
 import { getProfile, createProfile, updateProfile } from '../services/profileApi'
 
@@ -67,6 +68,14 @@ function ProfileManager() {
           ? 'Review and update your profile information.'
           : 'Welcome to Outty! Complete your profile below.'}
       </p>
+
+      {hasProfile && (
+        <p>
+          <Link className="matches-link" to="/matches">
+            Find Matches
+          </Link>
+        </p>
+      )}
 
       {isLoading && !profile ? (
         <p>Loading profile details...</p>

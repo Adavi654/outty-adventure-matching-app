@@ -279,6 +279,7 @@ class PotentialMatchServiceImplTest {
         return new PotentialMatchResponse(
                 userId,
                 firstName,
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
                 city,
                 state,
                 country,
