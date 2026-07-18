@@ -1,22 +1,23 @@
 package com.outty.backend.profile.dto.response;
 
 import com.outty.backend.profile.entity.enums.InterestedIn;
+import com.outty.backend.profile.entity.enums.RelationshipGoal;
+import com.outty.backend.profile.entity.enums.Gender;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record ProfileResponse(
         Long id,
         Long userId,
+        String firstName,
+        String lastName,
         String city,
         String state,
         String country,
-        String gender,
+        Gender gender,
         LocalDate birthDate,
         String bio,
         InterestedIn interestedIn,
-        String relationshipGoal,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        RelationshipGoal relationshipGoal
 ) {
 }

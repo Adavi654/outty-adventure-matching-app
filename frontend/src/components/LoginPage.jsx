@@ -14,32 +14,31 @@ export default function LoginPage() {
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
-  };
+      };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoggingIn(true);
     setError('');
     setStatusMessage('');
+    
     try {
-        const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials);
-        
-        const token = response.data.token;
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('userId', response.data.userId);
-        
-        setStatusMessage('Login successful! Loading your profile...');
-        setTimeout(() => {
-          navigate('/profile');
-        }, 1000);
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials);
+      const { token, userId } = response.data; 
+      
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('userId', userId);
+      
+      setStatusMessage('Login successful! Redirecting...');
+      setTimeout(() => {
+        navigate('/profile');
+      }, 1000);
+      
     } catch (err) {
-        setError(
-          err.response?.data?.message ||
-            err.response?.data ||
-            err.message ||
-            'Unable to log in. Please try again.'
-        );
-        setIsLoggingIn(false);
+      setError(
+        err.response?.data?.message || 'Unable to log in. Please try again.'
+      );
+      setIsLoggingIn(false);
     }
   };
 

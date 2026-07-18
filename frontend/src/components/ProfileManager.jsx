@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import ProfileForm from './ProfileForm'
 import { getProfile, createProfile, updateProfile } from '../services/profileApi'
+import { formatEnum } from '../utils/formatters';
 
 function ProfileManager() {
   const userId = localStorage.getItem('userId')
@@ -9,6 +10,7 @@ function ProfileManager() {
   const [profile, setProfile] = useState(null)
   const [hasProfile, setHasProfile] = useState(false)
   const [isLoading, setIsLoading] = useState(Boolean(userId))
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (!userId) {
@@ -34,20 +36,31 @@ function ProfileManager() {
   }, [userId, token])
 
   const handleSaveProfile = async (formData) => {
-    setIsLoading(true)
+    setIsLoading(true);
+    const token = localStorage.getItem('authToken');
+    
+    const payload = { 
+      ...formData, 
+      userId: parseInt(userId, 10)
+    };
+
     try {
       if (hasProfile) {
-        const updatedProfile = await updateProfile(userId, formData, token)
-        setProfile(updatedProfile)
+        const updatedProfile = await updateProfile(userId, payload, token);
+        setProfile(updatedProfile);
       } else {
-        const newProfile = await createProfile(userId, formData, token)
-        setProfile(newProfile)
-        setHasProfile(true)
+        const newProfile = await createProfile(userId, payload, token);
+        setProfile(newProfile);
+        setHasProfile(true);
       }
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Save failed:", err);
+      alert("Save failed. Check console for details.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (!userId) {
     return (
@@ -58,29 +71,50 @@ function ProfileManager() {
     )
   }
 
-  return (
-    <div>
-      {/* 3. Dynamically change headers based on state */}
-      <h1>{hasProfile ? 'Update Profile' : 'Create Profile'}</h1>
-      <p>
-        {hasProfile
-          ? 'Review and update your profile information.'
-          : 'Welcome to Outty! Complete your profile below.'}
-      </p>
 
-      {isLoading && !profile ? (
-        <p>Loading profile details...</p>
-      ) : (
-        <ProfileForm
-          key={hasProfile ? 'update' : 'create'}
-          mode={hasProfile ? 'update' : 'create'}
-          initialValues={profile || undefined}
-          onSubmit={handleSaveProfile}
-          isLoading={isLoading}
-        />
-      )}
-    </div>
-  )
+return (
+  <div>
+    <h1>{hasProfile ? 'My Profile' : 'Create Profile'}</h1>
+
+    {hasProfile && !isEditing ? (
+      <div className="profile-view">
+        {/* Add the rest of your profile fields here */}
+        <section className="location">
+          <p>📍 {profile.city}, {profile.state}, {profile.country}</p>
+        </section>
+
+        <div className="info-grid">
+          <div className="info-item">
+            <strong>Gender:</strong> {formatEnum(profile.gender)}
+          </div>
+          <div className="info-item">
+            <strong>Interested in:</strong> {formatEnum(profile.interestedIn)}
+          </div>
+          <div className="info-item">
+            <strong>Goals:</strong> {formatEnum(profile.relationshipGoal)}
+          </div>
+          <div className="info-item">
+            <strong>Birth Date:</strong> {profile.birthDate}
+          </div>
+        </div>
+
+        <section className="bio-section">
+          <h3>About Me</h3>
+          <p className="bio-text">{profile.bio}</p>
+        </section>
+
+        <button onClick={() => setIsEditing(true)}>Edit Profile</button>
+      </div>
+    ) : (
+      <ProfileForm 
+        mode={hasProfile ? 'update' : 'create'}
+        initialValues={profile || undefined} 
+        onSubmit={handleSaveProfile}
+        isLoading={isLoading}
+      />
+    )}
+  </div>
+);
 }
 
 export default ProfileManager
