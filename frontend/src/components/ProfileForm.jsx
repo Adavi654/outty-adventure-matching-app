@@ -11,12 +11,13 @@ const EMPTY_FORM_VALUES = {
   relationshipGoal: '',
 }
 
-function ProfileForm({
-  mode = 'create',
-  initialValues = EMPTY_FORM_VALUES,
-  onSubmit,
-  isLoading = false,
+function ProfileForm({ 
+  mode = 'create', 
+  initialValues = EMPTY_FORM_VALUES, 
+  onSubmit, 
+  isLoading = false 
 }) {
+
   const [formData, setFormData] = useState(initialValues)
   const [statusMessage, setStatusMessage] = useState('')
 
@@ -95,10 +96,10 @@ function ProfileForm({
           onChange={handleChange}
         >
           <option value="">Select gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Non-binary">Non-binary</option>
-          <option value="Prefer not to say">Prefer not to say</option>
+          <option value="MALE">Male</option>
+          <option value="FEMALE">Female</option>
+          <option value="NONBINARY">Non-binary</option>
+          <option value="PREFERNOT">Prefer not to say</option>
         </select>
       </div>
 
@@ -126,11 +127,11 @@ function ProfileForm({
       </div>
 
       <div className="form-field">
-        <label htmlFor="interestedIn">Interested In</label>
+        <label htmlFor="relationshipGoal">Relationship Goal</label>
         <select
-          id="interestedIn"
-          name="interestedIn"
-          value={formData.interestedIn}
+          id="relationshipGoal"
+          name="relationshipGoal"
+          value={formData.relationshipGoal}
           onChange={handleChange}
         >
           <option value="">Select interest</option>
@@ -141,14 +142,18 @@ function ProfileForm({
       </div>
 
       <div className="form-field">
-        <label htmlFor="relationshipGoal">Relationship Goal</label>
-        <input
-          id="relationshipGoal"
-          name="relationshipGoal"
-          type="text"
-          value={formData.relationshipGoal}
+        <label htmlFor="interestedIn">Interested In</label>
+        <select
+          id="interestedIn"
+          name="interestedIn"
+          value={formData.interestedIn}
           onChange={handleChange}
-        />
+        >
+          <option value="">Select interest</option>
+          <option value="MEN">Men</option>
+          <option value="WOMEN">Women</option>
+          <option value="BOTH">Both</option>
+        </select>
       </div>
 
       <button

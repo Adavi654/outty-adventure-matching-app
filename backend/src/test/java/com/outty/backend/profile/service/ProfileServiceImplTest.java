@@ -5,9 +5,12 @@ import com.outty.backend.auth.repository.UserRepository;
 import com.outty.backend.common.exception.ProfileAlreadyExistsException;
 import com.outty.backend.common.exception.ProfileNotFoundException;
 import com.outty.backend.profile.dto.request.ProfileRequest;
+import com.outty.backend.profile.dto.request.UpdateProfileRequest;
 import com.outty.backend.profile.dto.response.ProfileResponse;
 import com.outty.backend.profile.entity.Profile;
+import com.outty.backend.profile.entity.enums.Gender;
 import com.outty.backend.profile.entity.enums.InterestedIn;
+import com.outty.backend.profile.entity.enums.RelationshipGoal;
 import com.outty.backend.profile.repository.ProfileRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,11 +57,11 @@ class ProfileServiceImplTest {
                 .city("City")
                 .state("State")
                 .country("Country")
-                .gender("Other")
+                .gender(Gender.MALE)
                 .birthDate(LocalDate.of(1990,1,1))
                 .bio("Bio")
                 .interestedIn(InterestedIn.BOTH)
-                .relationshipGoal("Friendship")
+                .relationshipGoal(RelationshipGoal.BOTH)
                 .build();
     }
 
@@ -69,8 +72,8 @@ class ProfileServiceImplTest {
         when(profileRepository.save(any(Profile.class))).thenReturn(profile);
 
         ProfileRequest request = new ProfileRequest(
-                "City", "State", "Country", "Other",
-                LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, "Friendship"
+                1L, "City", "State", "Country", Gender.MALE,
+                LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH
         );
 
         ProfileResponse response = profileService.createProfile(1L, request);
@@ -102,9 +105,9 @@ class ProfileServiceImplTest {
         when(profileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
         when(profileRepository.save(any(Profile.class))).thenReturn(profile);
 
-        ProfileRequest request = new ProfileRequest(
-                "NewCity", "NewState", "NewCountry", "Other",
-                LocalDate.of(1991,2,2), "NewBio", InterestedIn.BOTH, "Dating"
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                "NewCity", "NewState", "NewCountry", Gender.MALE,
+                LocalDate.of(1991,2,2), "NewBio", InterestedIn.BOTH, RelationshipGoal.BOTH
         );
 
         ProfileResponse response = profileService.updateProfile(1L, request);
@@ -129,8 +132,8 @@ class ProfileServiceImplTest {
         when(profileRepository.existsByUserId(1L)).thenReturn(true);
 
         ProfileRequest request = new ProfileRequest(
-                "City", "State", "Country", "Other",
-                LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, "Friendship"
+                1L, "City", "State", "Country", Gender.FEMALE,
+                LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.FRIENDSHIPS
         );
 
         assertThrows(ProfileAlreadyExistsException.class, () -> profileService.createProfile(1L, request));

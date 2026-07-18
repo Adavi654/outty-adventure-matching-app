@@ -1,17 +1,14 @@
 package com.outty.backend.profile.dto.request;
 
+import com.outty.backend.profile.entity.enums.Gender;
 import com.outty.backend.profile.entity.enums.InterestedIn;
 import com.outty.backend.profile.entity.enums.RelationshipGoal;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import com.outty.backend.profile.entity.enums.Gender;
 
 import java.time.LocalDate;
 
-public record ProfileRequest(
-        Long userId,
-
+public record UpdateProfileRequest(
         @Size(max = 100, message = "City must be at most 100 characters")
         String city,
 
@@ -24,13 +21,12 @@ public record ProfileRequest(
         Gender gender,
 
         LocalDate birthDate,
-
-        @NotBlank(message = "Bio is required")
+        
         @Size(max = 500, message = "Bio must be at most 500 characters")
         String bio,
 
         InterestedIn interestedIn,
 
         RelationshipGoal relationshipGoal
-) {
+) {    
 }

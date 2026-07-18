@@ -2,10 +2,12 @@ package com.outty.backend.profile.entity;
 
 import com.outty.backend.auth.entity.User;
 import com.outty.backend.profile.entity.enums.InterestedIn;
+import com.outty.backend.profile.entity.enums.RelationshipGoal;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import com.outty.backend.profile.entity.enums.Gender;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +20,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Profile {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,8 +37,9 @@ public class Profile {
     @Column(nullable = false, length = 100)
     private String country;
 
-    @Column(nullable = false, length = 50)
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = false, length = 50)
+    private Gender gender;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -49,8 +51,9 @@ public class Profile {
     @Column(name = "interested_in", nullable = false, length = 20)
     private InterestedIn interestedIn;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "relationship_goal", nullable = false, length = 100)
-    private String relationshipGoal;
+    private RelationshipGoal relationshipGoal;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
