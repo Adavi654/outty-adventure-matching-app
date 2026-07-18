@@ -17,12 +17,13 @@ function ProfileForm({
   onSubmit, 
   isLoading = false 
 }) {
-  useEffect(() => {
-    setFormData(initialValues)
-  }, [initialValues])
 
   const [formData, setFormData] = useState(initialValues)
   const [statusMessage, setStatusMessage] = useState('')
+
+  useEffect(() => {
+    setFormData(initialValues)
+  }, [initialValues])
 
   const handleChange = (event) => {
     const { name, value } = event.target
