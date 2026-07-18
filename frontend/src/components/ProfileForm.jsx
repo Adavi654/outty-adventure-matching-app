@@ -21,10 +21,6 @@ function ProfileForm({
   const [formData, setFormData] = useState(initialValues)
   const [statusMessage, setStatusMessage] = useState('')
 
-  useEffect(() => {
-    setFormData(initialValues)
-  }, [initialValues])
-
   const handleChange = (event) => {
     const { name, value } = event.target
     setFormData((prev) => ({
