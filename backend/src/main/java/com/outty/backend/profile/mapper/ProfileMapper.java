@@ -21,6 +21,9 @@ public class ProfileMapper {
         .gender(request.gender())
         .interestedIn(request.interestedIn())
         .relationshipGoal(request.relationshipGoal())
+        .instagramUrl(normalizeUrl(request.instagramUrl()))
+        .facebookUrl(normalizeUrl(request.facebookUrl()))
+        .xUrl(normalizeUrl(request.xUrl()))
         .build();
     }
 
@@ -37,7 +40,10 @@ public class ProfileMapper {
             profile.getBirthDate(),
             profile.getBio(),
             profile.getInterestedIn(),
-            profile.getRelationshipGoal()            
+            profile.getRelationshipGoal(),
+            profile.getInstagramUrl(),
+            profile.getFacebookUrl(),
+            profile.getXUrl()
         );
     }
 
@@ -50,5 +56,16 @@ public class ProfileMapper {
         profile.setBio(request.bio());
         profile.setInterestedIn(request.interestedIn());
         profile.setRelationshipGoal(request.relationshipGoal());
+        profile.setInstagramUrl(normalizeUrl(request.instagramUrl()));
+        profile.setFacebookUrl(normalizeUrl(request.facebookUrl()));
+        profile.setXUrl(normalizeUrl(request.xUrl()));
+    }
+
+    private static String normalizeUrl(String url) {
+        if (url == null || url.isBlank()) {
+            return null;
+        }
+
+        return url.trim();
     }
 }

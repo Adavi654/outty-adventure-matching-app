@@ -18,6 +18,9 @@ public record ProfileResponse(
         LocalDate birthDate,
         String bio,
         InterestedIn interestedIn,
-        RelationshipGoal relationshipGoal
+        RelationshipGoal relationshipGoal,
+        String instagramUrl,
+        String facebookUrl,
+        String xUrl
 ) {
 }
