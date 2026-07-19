@@ -22,19 +22,16 @@ function ProfileForm({
   isLoading = false,
 }) {
   const [formData, setFormData] = useState({
-    ...initialValues,
-    photos: initialValues?.photos || [],
-  });
-  const [statusMessage, setStatusMessage] = useState("");
-  const [photoError, setPhotoError] = useState("");
+  ...EMPTY_FORM_VALUES,
+  ...initialValues,
+  photos: initialValues?.photos || [],
+  instagramUrl: initialValues?.instagramUrl ?? '',
+  facebookUrl: initialValues?.facebookUrl ?? '',
+  xUrl: initialValues?.xUrl ?? '',
+});
 
-  const [formData, setFormData] = useState({
-    ...EMPTY_FORM_VALUES,
-    ...initialValues,
-    instagramUrl: initialValues?.instagramUrl ?? '',
-    facebookUrl: initialValues?.facebookUrl ?? '',
-    xUrl: initialValues?.xUrl ?? '',
-  })
+const [statusMessage, setStatusMessage] = useState("");
+const [photoError, setPhotoError] = useState("");
   const [statusMessage, setStatusMessage] = useState('')
 
   const handleChange = (event) => {
