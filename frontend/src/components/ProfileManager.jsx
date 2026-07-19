@@ -124,7 +124,6 @@ return (
           </div>
         )}
 
-        {/* Social Links are now correctly nested inside profile-view */}
         {(profile.instagramUrl || profile.facebookUrl || profile.xUrl) && (
           <section className="social-links-section">
             <h3>Social Links</h3>
