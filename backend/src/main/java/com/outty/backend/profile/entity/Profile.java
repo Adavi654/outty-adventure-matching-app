@@ -62,6 +62,15 @@ public class Profile {
     @Column(name = "photo_url", nullable = false)
     @Builder.Default
     private List<String> photos = new ArrayList<>();
+  
+    @Column(name = "instagram_url", nullable = true, length = 255)
+    private String instagramUrl;
+
+    @Column(name = "facebook_url", nullable = true, length = 255)
+    private String facebookUrl;
+
+    @Column(name = "x_url", nullable = true, length = 255)
+    private String xUrl;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

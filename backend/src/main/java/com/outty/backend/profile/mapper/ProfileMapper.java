@@ -22,6 +22,9 @@ public class ProfileMapper {
         .interestedIn(request.interestedIn())
         .relationshipGoal(request.relationshipGoal())
         .photos(request.photos() == null ? new java.util.ArrayList<>() : new java.util.ArrayList<>(request.photos()))
+        .instagramUrl(normalizeUrl(request.instagramUrl()))
+        .facebookUrl(normalizeUrl(request.facebookUrl()))
+        .xUrl(normalizeUrl(request.xUrl()))
         .build();
     }
 
@@ -39,7 +42,10 @@ public class ProfileMapper {
             profile.getBio(),
             profile.getInterestedIn(),
             profile.getRelationshipGoal(),
-            profile.getPhotos() == null ? java.util.List.of() : profile.getPhotos()
+            profile.getPhotos() == null ? java.util.List.of() : profile.getPhotos(),
+            profile.getInstagramUrl(),
+            profile.getFacebookUrl(),
+            profile.getXUrl()
         );
     }
 
@@ -53,5 +59,16 @@ public class ProfileMapper {
         profile.setInterestedIn(request.interestedIn());
         profile.setRelationshipGoal(request.relationshipGoal());
         profile.setPhotos(request.photos() == null ? new java.util.ArrayList<>() : new java.util.ArrayList<>(request.photos()));
+        profile.setInstagramUrl(normalizeUrl(request.instagramUrl()));
+        profile.setFacebookUrl(normalizeUrl(request.facebookUrl()));
+        profile.setXUrl(normalizeUrl(request.xUrl()));
+    }
+
+    private static String normalizeUrl(String url) {
+        if (url == null || url.isBlank()) {
+            return null;
+        }
+
+        return url.trim();
     }
 }

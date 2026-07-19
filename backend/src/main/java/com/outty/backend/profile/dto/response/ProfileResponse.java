@@ -20,6 +20,9 @@ public record ProfileResponse(
         String bio,
         InterestedIn interestedIn,
         RelationshipGoal relationshipGoal,
-        List<String> photos
+        List<String> photos,
+        String instagramUrl,
+        String facebookUrl,
+        String xUrl
 ) {
 }

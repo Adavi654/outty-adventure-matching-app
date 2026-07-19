@@ -1,6 +1,19 @@
 import { useState } from "react";
 
 const MAX_PHOTOS = 10;
+const EMPTY_FORM_VALUES = {
+  city: '',
+  state: '',
+  country: '',
+  gender: '',
+  birthDate: '',
+  bio: '',
+  interestedIn: '',
+  relationshipGoal: '',
+  instagramUrl: '',
+  facebookUrl: '',
+  xUrl: '',
+}
 
 const EMPTY_FORM_VALUES = {
   city: "",
@@ -25,6 +38,15 @@ function ProfileForm({
   });
   const [statusMessage, setStatusMessage] = useState("");
   const [photoError, setPhotoError] = useState("");
+
+  const [formData, setFormData] = useState({
+    ...EMPTY_FORM_VALUES,
+    ...initialValues,
+    instagramUrl: initialValues?.instagramUrl ?? '',
+    facebookUrl: initialValues?.facebookUrl ?? '',
+    xUrl: initialValues?.xUrl ?? '',
+  })
+  const [statusMessage, setStatusMessage] = useState('')
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -221,6 +243,39 @@ function ProfileForm({
             ))}
           </div>
         )}
+        <label htmlFor="instagramUrl">Instagram URL</label>
+        <input
+          id="instagramUrl"
+          name="instagramUrl"
+          type="url"
+          placeholder="https://instagram.com/username"
+          value={formData.instagramUrl}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="facebookUrl">Facebook URL</label>
+        <input
+          id="facebookUrl"
+          name="facebookUrl"
+          type="url"
+          placeholder="https://facebook.com/username"
+          value={formData.facebookUrl}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="xUrl">X URL</label>
+        <input
+          id="xUrl"
+          name="xUrl"
+          type="url"
+          placeholder="https://x.com/username"
+          value={formData.xUrl}
+          onChange={handleChange}
+        />
       </div>
 
       <button

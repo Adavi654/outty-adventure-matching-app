@@ -336,3 +336,47 @@ header nav button.active {
 .login-link a:hover {
   text-decoration: underline;
 }
+
+.social-links-section {
+  margin: 24px 0;
+}
+
+.social-links-section h3 {
+  margin: 0 0 12px;
+  color: var(--text-h);
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.social-link-button {
+  display: inline-block;
+  padding: 10px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.social-link-button:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.social-link-button:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}

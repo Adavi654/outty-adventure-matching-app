@@ -81,7 +81,8 @@ class ProfileServiceImplTest {
         ProfileRequest request = new ProfileRequest(
                 1L, "City", "State", "Country", Gender.MALE,
                 LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
-                List.of("https://example.com/photo-1.jpg", "https://example.com/photo-2.jpg")
+                List.of("https://example.com/photo-1.jpg", "https://example.com/photo-2.jpg"),
+                null, null, null
         );
 
         ProfileResponse response = profileService.createProfile(1L, request);
@@ -118,7 +119,8 @@ class ProfileServiceImplTest {
         UpdateProfileRequest request = new UpdateProfileRequest(
                 "NewCity", "NewState", "NewCountry", Gender.MALE,
                 LocalDate.of(1991,2,2), "NewBio", InterestedIn.BOTH, RelationshipGoal.BOTH,
-                List.of("https://example.com/photo-3.jpg")
+                List.of("https://example.com/photo-3.jpg"),
+                null, null, null
         );
 
         ProfileResponse response = profileService.updateProfile(1L, request);
@@ -146,9 +148,92 @@ class ProfileServiceImplTest {
         ProfileRequest request = new ProfileRequest(
                 1L, "City", "State", "Country", Gender.FEMALE,
                 LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.FRIENDSHIPS,
-                List.of()
+                List.of(),
+                null, null, null
         );
 
         assertThrows(ProfileAlreadyExistsException.class, () -> profileService.createProfile(1L, request));
+    }
+
+    @Test
+    void shouldCreateProfileWithValidSocialUrls() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(profileRepository.existsByUserId(1L)).thenReturn(false);
+        when(profileRepository.save(any(Profile.class))).thenAnswer(invocation -> {
+            Profile saved = invocation.getArgument(0);
+            saved.setId(2L);
+            return saved;
+        });
+
+        ProfileRequest request = new ProfileRequest(
+                1L, "City", "State", "Country", Gender.MALE,
+                LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                "https://instagram.com/outty_hiker",
+                "https://facebook.com/outty.hiker",
+                "https://x.com/outty_hiker"
+        );
+
+        ProfileResponse response = profileService.createProfile(1L, request);
+
+        assertEquals("https://instagram.com/outty_hiker", response.instagramUrl());
+        assertEquals("https://facebook.com/outty.hiker", response.facebookUrl());
+        assertEquals("https://x.com/outty_hiker", response.xUrl());
+        verify(profileRepository).save(any(Profile.class));
+    }
+
+    @Test
+    void shouldUpdateAndReplaceSocialUrl() {
+        profile.setInstagramUrl("https://instagram.com/old_handle");
+        when(profileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
+        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                "City", "State", "Country", Gender.MALE,
+                LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                "https://instagram.com/new_handle",
+                "https://facebook.com/outty.hiker",
+                "https://x.com/outty_hiker"
+        );
+
+        ProfileResponse response = profileService.updateProfile(1L, request);
+
+        assertEquals("https://instagram.com/new_handle", response.instagramUrl());
+        verify(profileRepository).save(profile);
+    }
+
+    @Test
+    void shouldClearSocialUrlWithBlankInput() {
+        profile.setInstagramUrl("https://instagram.com/outty_hiker");
+        profile.setFacebookUrl("https://facebook.com/outty.hiker");
+        when(profileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
+        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                "City", "State", "Country", Gender.MALE,
+                LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                "https://instagram.com/outty_hiker",
+                "",
+                null
+        );
+
+        ProfileResponse response = profileService.updateProfile(1L, request);
+
+        assertEquals("https://instagram.com/outty_hiker", response.instagramUrl());
+        assertNull(response.facebookUrl());
+        assertNull(response.xUrl());
+    }
+
+    @Test
+    void shouldIncludeSavedSocialUrlsInProfileResponse() {
+        profile.setInstagramUrl("https://instagram.com/outty_hiker");
+        profile.setFacebookUrl("https://facebook.com/outty.hiker");
+        profile.setXUrl("https://x.com/outty_hiker");
+        when(profileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
+
+        ProfileResponse response = profileService.getProfile(1L);
+
+        assertEquals("https://instagram.com/outty_hiker", response.instagramUrl());
+        assertEquals("https://facebook.com/outty.hiker", response.facebookUrl());
+        assertEquals("https://x.com/outty_hiker", response.xUrl());
     }
 }
