@@ -9,6 +9,9 @@ const EMPTY_FORM_VALUES = {
   bio: '',
   interestedIn: '',
   relationshipGoal: '',
+  instagramUrl: '',
+  facebookUrl: '',
+  xUrl: '',
 }
 
 function ProfileForm({ 
@@ -18,7 +21,13 @@ function ProfileForm({
   isLoading = false 
 }) {
 
-  const [formData, setFormData] = useState(initialValues)
+  const [formData, setFormData] = useState({
+    ...EMPTY_FORM_VALUES,
+    ...initialValues,
+    instagramUrl: initialValues?.instagramUrl ?? '',
+    facebookUrl: initialValues?.facebookUrl ?? '',
+    xUrl: initialValues?.xUrl ?? '',
+  })
   const [statusMessage, setStatusMessage] = useState('')
 
   const handleChange = (event) => {
@@ -154,6 +163,42 @@ function ProfileForm({
           <option value="WOMEN">Women</option>
           <option value="BOTH">Both</option>
         </select>
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="instagramUrl">Instagram URL</label>
+        <input
+          id="instagramUrl"
+          name="instagramUrl"
+          type="url"
+          placeholder="https://instagram.com/username"
+          value={formData.instagramUrl}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="facebookUrl">Facebook URL</label>
+        <input
+          id="facebookUrl"
+          name="facebookUrl"
+          type="url"
+          placeholder="https://facebook.com/username"
+          value={formData.facebookUrl}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="xUrl">X URL</label>
+        <input
+          id="xUrl"
+          name="xUrl"
+          type="url"
+          placeholder="https://x.com/username"
+          value={formData.xUrl}
+          onChange={handleChange}
+        />
       </div>
 
       <button

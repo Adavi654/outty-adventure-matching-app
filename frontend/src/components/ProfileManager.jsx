@@ -103,6 +103,44 @@ return (
           <p className="bio-text">{profile.bio}</p>
         </section>
 
+        {(profile.instagramUrl || profile.facebookUrl || profile.xUrl) && (
+          <section className="social-links-section">
+            <h3>Social Links</h3>
+            <div className="social-links">
+              {profile.instagramUrl && (
+                <a
+                  className="social-link-button"
+                  href={profile.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Instagram
+                </a>
+              )}
+              {profile.facebookUrl && (
+                <a
+                  className="social-link-button"
+                  href={profile.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Facebook
+                </a>
+              )}
+              {profile.xUrl && (
+                <a
+                  className="social-link-button"
+                  href={profile.xUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  X
+                </a>
+              )}
+            </div>
+          </section>
+        )}
+
         <button onClick={() => setIsEditing(true)}>Edit Profile</button>
       </div>
     ) : (

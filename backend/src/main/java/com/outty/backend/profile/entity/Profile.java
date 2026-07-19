@@ -55,6 +55,15 @@ public class Profile {
     @Column(name = "relationship_goal", nullable = false, length = 100)
     private RelationshipGoal relationshipGoal;
 
+    @Column(name = "instagram_url", nullable = true, length = 255)
+    private String instagramUrl;
+
+    @Column(name = "facebook_url", nullable = true, length = 255)
+    private String facebookUrl;
+
+    @Column(name = "x_url", nullable = true, length = 255)
+    private String xUrl;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
