@@ -14,7 +14,7 @@ At the end of the sprint, we planned to compare our completed story points with 
 
 _________________________
 
-# 2. Continuous Integration
+# 2. Continuous Integration Rationale and Evidence
 
 GitHub Actions is used for continuous integration because it integrates directly with GitHub, automatically runs on pushes and pull requests to `main`, requires no separate CI platform, and is appropriate for this class project.
 
@@ -29,7 +29,7 @@ _________________________
 # 3. Documentation
 
 - Story Tasks and Kanban Board (Jira): https://swe-6733.atlassian.net/jira/software/projects/OUTTY/boards/1
-- Burndown Chart Image: In Git repository under Sprint_2/Burndown_Chart, as well as under the "Sprint Insights" button (depicted as a chart) on the Jira Kanban Board page.
+- Burndown Chart Image: In Git repository under Sprint_2/Burndown_Chart
 - Annotated Scrum Evidence: In Git repository under Sprint_2/Annotated_Scrum
 - Mobbing Evidence: In Git repository under Sprint_2/Mobbing
 - Sprint Review: In Git repository under Sprint_2/Sprint_Review
