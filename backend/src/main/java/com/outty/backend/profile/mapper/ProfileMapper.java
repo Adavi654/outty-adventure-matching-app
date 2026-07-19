@@ -21,6 +21,7 @@ public class ProfileMapper {
         .gender(request.gender())
         .interestedIn(request.interestedIn())
         .relationshipGoal(request.relationshipGoal())
+        .photos(request.photos() == null ? new java.util.ArrayList<>() : new java.util.ArrayList<>(request.photos()))
         .build();
     }
 
@@ -37,7 +38,8 @@ public class ProfileMapper {
             profile.getBirthDate(),
             profile.getBio(),
             profile.getInterestedIn(),
-            profile.getRelationshipGoal()            
+            profile.getRelationshipGoal(),
+            profile.getPhotos() == null ? java.util.List.of() : profile.getPhotos()
         );
     }
 
@@ -50,5 +52,6 @@ public class ProfileMapper {
         profile.setBio(request.bio());
         profile.setInterestedIn(request.interestedIn());
         profile.setRelationshipGoal(request.relationshipGoal());
+        profile.setPhotos(request.photos() == null ? new java.util.ArrayList<>() : new java.util.ArrayList<>(request.photos()));
     }
 }

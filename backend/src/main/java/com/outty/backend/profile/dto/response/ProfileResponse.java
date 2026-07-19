@@ -5,6 +5,7 @@ import com.outty.backend.profile.entity.enums.RelationshipGoal;
 import com.outty.backend.profile.entity.enums.Gender;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ProfileResponse(
         Long id,
@@ -18,6 +19,7 @@ public record ProfileResponse(
         LocalDate birthDate,
         String bio,
         InterestedIn interestedIn,
-        RelationshipGoal relationshipGoal
+        RelationshipGoal relationshipGoal,
+        List<String> photos
 ) {
 }

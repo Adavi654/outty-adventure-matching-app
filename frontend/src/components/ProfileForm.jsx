@@ -1,56 +1,89 @@
-import { useState } from 'react'
+import { useState } from "react";
+
+const MAX_PHOTOS = 10;
 
 const EMPTY_FORM_VALUES = {
-  city: '',
-  state: '',
-  country: '',
-  gender: '',
-  birthDate: '',
-  bio: '',
-  interestedIn: '',
-  relationshipGoal: '',
-}
+  city: "",
+  state: "",
+  country: "",
+  gender: "",
+  birthDate: "",
+  bio: "",
+  interestedIn: "",
+  relationshipGoal: "",
+};
 
-function ProfileForm({ 
-  mode = 'create', 
-  initialValues = EMPTY_FORM_VALUES, 
-  onSubmit, 
-  isLoading = false 
+function ProfileForm({
+  mode = "create",
+  initialValues = EMPTY_FORM_VALUES,
+  onSubmit,
+  isLoading = false,
 }) {
-
-  const [formData, setFormData] = useState(initialValues)
-  const [statusMessage, setStatusMessage] = useState('')
+  const [formData, setFormData] = useState({
+    ...initialValues,
+    photos: initialValues?.photos || [],
+  });
+  const [statusMessage, setStatusMessage] = useState("");
+  const [photoError, setPhotoError] = useState("");
 
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
+
+  const handlePhotoSelection = (event) => {
+    const selectedFiles = Array.from(event.target.files || []);
+    const nextPhotos = [...(formData.photos || [])];
+
+    if (selectedFiles.length + nextPhotos.length > MAX_PHOTOS) {
+      setPhotoError(`You can upload up to ${MAX_PHOTOS} photos.`);
+      return;
+    }
+
+    selectedFiles.forEach((file) => {
+      nextPhotos.push(URL.createObjectURL(file));
+    });
+
+    setFormData((prev) => ({
+      ...prev,
+      photos: nextPhotos,
+    }));
+    setPhotoError("");
+    event.target.value = "";
+  };
+
+  const removePhoto = (photoToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      photos: (prev.photos || []).filter((photo) => photo !== photoToRemove),
+    }));
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    setStatusMessage('')
+    event.preventDefault();
+    setStatusMessage("");
 
     try {
-      await onSubmit(formData)
+      await onSubmit({ ...formData, photos: formData.photos || [] });
 
-      if (mode === 'update') {
-        setStatusMessage('Profile updated successfully.')
+      if (mode === "update") {
+        setStatusMessage("Profile updated successfully.");
       } else {
-        setStatusMessage('Profile created successfully.')
+        setStatusMessage("Profile created successfully.");
       }
     } catch {
-      setStatusMessage('Unable to create profile.')
+      setStatusMessage("Unable to create profile.");
     }
-  }
+  };
 
   const buttonText = isLoading
-    ? 'Saving...'
-    : mode === 'update'
-      ? 'Save Changes'
-      : 'Save Profile'
+    ? "Saving..."
+    : mode === "update"
+      ? "Save Changes"
+      : "Save Profile";
 
   return (
     <form className="profile-form" onSubmit={handleSubmit}>
@@ -156,6 +189,40 @@ function ProfileForm({
         </select>
       </div>
 
+      <div className="form-field">
+        <label htmlFor="photo-upload">Upload Photos</label>
+        <input
+          id="photo-upload"
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handlePhotoSelection}
+        />
+        <p className="helper-text">
+          Choose up to {MAX_PHOTOS} photos. You can remove any selected photo
+          before saving.
+        </p>
+        {photoError && (
+          <p className="status-message error-text">{photoError}</p>
+        )}
+        {formData.photos?.length > 0 && (
+          <div className="photo-preview-list">
+            {formData.photos.map((photo, index) => (
+              <div className="photo-preview-card" key={`${photo}-${index}`}>
+                <img src={photo} alt={`Profile preview ${index + 1}`} />
+                <button
+                  type="button"
+                  className="remove-photo-button"
+                  onClick={() => removePhoto(photo)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       <button
         className="save-profile-button"
         type="submit"
@@ -166,7 +233,7 @@ function ProfileForm({
 
       {statusMessage && <p>{statusMessage}</p>}
     </form>
-  )
+  );
 }
 
-export default ProfileForm
+export default ProfileForm;

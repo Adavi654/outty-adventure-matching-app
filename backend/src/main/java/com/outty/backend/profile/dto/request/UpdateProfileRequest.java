@@ -7,6 +7,7 @@ import com.outty.backend.profile.entity.enums.RelationshipGoal;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record UpdateProfileRequest(
         @Size(max = 100, message = "City must be at most 100 characters")
@@ -27,6 +28,8 @@ public record UpdateProfileRequest(
 
         InterestedIn interestedIn,
 
-        RelationshipGoal relationshipGoal
+        RelationshipGoal relationshipGoal,
+
+        List<String> photos
 ) {    
 }

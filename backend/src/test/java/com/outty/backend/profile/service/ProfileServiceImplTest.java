@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,6 +63,7 @@ class ProfileServiceImplTest {
                 .bio("Bio")
                 .interestedIn(InterestedIn.BOTH)
                 .relationshipGoal(RelationshipGoal.BOTH)
+                .photos(List.of("https://example.com/photo-1.jpg"))
                 .build();
     }
 
@@ -69,17 +71,24 @@ class ProfileServiceImplTest {
     void shouldCreateProfile() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(profileRepository.existsByUserId(1L)).thenReturn(false);
-        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+        when(profileRepository.save(any(Profile.class))).thenAnswer(invocation -> {
+            Profile savedProfile = invocation.getArgument(0);
+            savedProfile.setId(2L);
+            savedProfile.setPhotos(List.of("https://example.com/photo-1.jpg", "https://example.com/photo-2.jpg"));
+            return savedProfile;
+        });
 
         ProfileRequest request = new ProfileRequest(
                 1L, "City", "State", "Country", Gender.MALE,
-                LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH
+                LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                List.of("https://example.com/photo-1.jpg", "https://example.com/photo-2.jpg")
         );
 
         ProfileResponse response = profileService.createProfile(1L, request);
 
         assertNotNull(response);
         assertEquals(2L, response.id());
+        assertEquals(List.of("https://example.com/photo-1.jpg", "https://example.com/photo-2.jpg"), response.photos());
         verify(profileRepository).save(any(Profile.class));
     }
 
@@ -107,13 +116,15 @@ class ProfileServiceImplTest {
 
         UpdateProfileRequest request = new UpdateProfileRequest(
                 "NewCity", "NewState", "NewCountry", Gender.MALE,
-                LocalDate.of(1991,2,2), "NewBio", InterestedIn.BOTH, RelationshipGoal.BOTH
+                LocalDate.of(1991,2,2), "NewBio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                List.of("https://example.com/photo-3.jpg")
         );
 
         ProfileResponse response = profileService.updateProfile(1L, request);
 
         assertNotNull(response);
         assertEquals("NewCity", response.city());
+        assertEquals(List.of("https://example.com/photo-3.jpg"), response.photos());
         verify(profileRepository).save(any(Profile.class));
     }
 
@@ -133,7 +144,8 @@ class ProfileServiceImplTest {
 
         ProfileRequest request = new ProfileRequest(
                 1L, "City", "State", "Country", Gender.FEMALE,
-                LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.FRIENDSHIPS
+                LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.FRIENDSHIPS,
+                List.of()
         );
 
         assertThrows(ProfileAlreadyExistsException.class, () -> profileService.createProfile(1L, request));

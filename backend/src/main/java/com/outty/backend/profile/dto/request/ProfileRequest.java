@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import com.outty.backend.profile.entity.enums.Gender;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ProfileRequest(
         Long userId,
@@ -31,6 +32,8 @@ public record ProfileRequest(
 
         InterestedIn interestedIn,
 
-        RelationshipGoal relationshipGoal
+        RelationshipGoal relationshipGoal,
+
+        List<String> photos
 ) {
 }
