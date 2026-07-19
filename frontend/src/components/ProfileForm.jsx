@@ -29,9 +29,8 @@ function ProfileForm({
   facebookUrl: initialValues?.facebookUrl ?? '',
   xUrl: initialValues?.xUrl ?? '',
 });
-
-const [statusMessage, setStatusMessage] = useState("");
-const [photoError, setPhotoError] = useState("");
+  
+  const [photoError, setPhotoError] = useState("");
   const [statusMessage, setStatusMessage] = useState('')
 
   const handleChange = (event) => {
