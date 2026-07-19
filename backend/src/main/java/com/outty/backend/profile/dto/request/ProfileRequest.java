@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import com.outty.backend.profile.entity.enums.Gender;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ProfileRequest(
         Long userId,
@@ -34,6 +35,7 @@ public record ProfileRequest(
 
         RelationshipGoal relationshipGoal,
 
+        List<String> photos,
         @Size(
                 max = 255,
                 message = "Instagram URL must be at most 255 characters"

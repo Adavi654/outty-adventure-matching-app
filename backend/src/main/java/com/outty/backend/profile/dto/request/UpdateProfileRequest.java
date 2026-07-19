@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record UpdateProfileRequest(
         @Size(max = 100, message = "City must be at most 100 characters")
@@ -30,6 +31,7 @@ public record UpdateProfileRequest(
 
         RelationshipGoal relationshipGoal,
 
+        List<String> photos,
         @Size(
                 max = 255,
                 message = "Instagram URL must be at most 255 characters"

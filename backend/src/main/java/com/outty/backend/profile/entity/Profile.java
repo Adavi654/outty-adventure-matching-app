@@ -11,6 +11,8 @@ import com.outty.backend.profile.entity.enums.Gender;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "profiles")
@@ -55,6 +57,12 @@ public class Profile {
     @Column(name = "relationship_goal", nullable = false, length = 100)
     private RelationshipGoal relationshipGoal;
 
+    @ElementCollection
+    @CollectionTable(name = "profile_photos", joinColumns = @JoinColumn(name = "profile_id"))
+    @Column(name = "photo_url", nullable = false)
+    @Builder.Default
+    private List<String> photos = new ArrayList<>();
+  
     @Column(name = "instagram_url", nullable = true, length = 255)
     private String instagramUrl;
 
