@@ -152,5 +152,6 @@ return (
     )}
   </div>
 );
+}
 
 export default ProfileManager;
