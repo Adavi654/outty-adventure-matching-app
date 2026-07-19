@@ -79,26 +79,59 @@ function ProfileManager() {
     );
   }
 
-  return (
+return (
   <div>
     <h1>{hasProfile ? "My Profile" : "Create Profile"}</h1>
 
     {hasProfile && !isEditing ? (
       <div className="profile-view">
-        {/* ... Location and Info Grid sections ... */}
         <section className="location">
-           <p>📍 {profile.city}, {profile.state}, {profile.country}</p>
+          <p>📍 {profile.city}, {profile.state}, {profile.country}</p>
         </section>
-        
-        <div className="info-grid">...</div>
-        
+
+        <div className="info-grid">
+          <div className="info-item"><strong>Gender:</strong> {formatEnum(profile.gender)}</div>
+          <div className="info-item"><strong>Interested in:</strong> {formatEnum(profile.interestedIn)}</div>
+          <div className="info-item"><strong>Goals:</strong> {formatEnum(profile.relationshipGoal)}</div>
+          <div className="info-item"><strong>Birth Date:</strong> {profile.birthDate}</div>
+        </div>
+
+        <div className="profile-view-actions">
+          <button className="secondary-action-button" onClick={() => setIsGalleryOpen(true)}>
+            View Photo Gallery
+          </button>
+        </div>
+
+        {isGalleryOpen && (
+          <div className="modal-backdrop" role="dialog" aria-modal="true" onClick={() => setIsGalleryOpen(false)}>
+            <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3 id="photo-gallery-title">Photo Gallery</h3>
+                <button className="modal-close-button" onClick={() => setIsGalleryOpen(false)}>×</button>
+              </div>
+              {photos.length > 0 ? (
+                <div className="photo-gallery-grid">
+                  {photos.map((photo, index) => (
+                    <div className="photo-gallery-card" key={`${photo}-${index}`}>
+                      <img src={photo} alt={`Profile photo ${index + 1}`} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="helper-text">No photos have been added yet.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Social Links are now correctly nested inside profile-view */}
         {(profile.instagramUrl || profile.facebookUrl || profile.xUrl) && (
           <section className="social-links-section">
             <h3>Social Links</h3>
             <div className="social-links">
-              {profile.instagramUrl && <a href={profile.instagramUrl}>Instagram</a>}
-              {profile.facebookUrl && <a href={profile.facebookUrl}>Facebook</a>}
-              {profile.xUrl && <a href={profile.xUrl}>X</a>}
+              {profile.instagramUrl && <a className="social-link-button" href={profile.instagramUrl} target="_blank" rel="noopener noreferrer">Instagram</a>}
+              {profile.facebookUrl && <a className="social-link-button" href={profile.facebookUrl} target="_blank" rel="noopener noreferrer">Facebook</a>}
+              {profile.xUrl && <a className="social-link-button" href={profile.xUrl} target="_blank" rel="noopener noreferrer">X</a>}
             </div>
           </section>
         )}
