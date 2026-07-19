@@ -100,6 +100,7 @@ class ProfileServiceImplTest {
 
         assertNotNull(response);
         assertEquals(2L, response.id());
+        assertEquals(List.of("https://example.com/photo-1.jpg"), response.photos());
     }
 
     @Test

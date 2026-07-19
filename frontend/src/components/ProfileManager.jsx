@@ -15,6 +15,7 @@ function ProfileManager() {
   const [hasProfile, setHasProfile] = useState(false);
   const [isLoading, setIsLoading] = useState(Boolean(userId));
   const [isEditing, setIsEditing] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   useEffect(() => {
     if (!userId) {
@@ -67,6 +68,8 @@ function ProfileManager() {
     }
   };
 
+  const photos = profile?.photos || [];
+
   if (!userId) {
     return (
       <div>
@@ -103,6 +106,50 @@ function ProfileManager() {
               <strong>Birth Date:</strong> {profile.birthDate}
             </div>
           </div>
+
+          <div className="profile-view-actions">
+            <button
+              className="secondary-action-button"
+              onClick={() => setIsGalleryOpen(true)}
+            >
+              View Photo Gallery
+            </button>
+          </div>
+
+          {isGalleryOpen && (
+            <div
+              className="modal-backdrop"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="photo-gallery-title"
+              onClick={() => setIsGalleryOpen(false)}
+            >
+              <div className="modal-card" onClick={(event) => event.stopPropagation()}>
+                <div className="modal-header">
+                  <h3 id="photo-gallery-title">Photo Gallery</h3>
+                  <button
+                    className="modal-close-button"
+                    onClick={() => setIsGalleryOpen(false)}
+                    aria-label="Close photo gallery"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {photos.length > 0 ? (
+                  <div className="photo-gallery-grid">
+                    {photos.map((photo, index) => (
+                      <div className="photo-gallery-card" key={`${photo}-${index}`}>
+                        <img src={photo} alt={`Profile photo ${index + 1}`} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="helper-text">No photos have been added to this profile yet.</p>
+                )}
+              </div>
+            </div>
+          )}
 
           <section className="bio-section">
             <h3>About Me</h3>
