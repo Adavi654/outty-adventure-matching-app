@@ -1,1 +1,1 @@
-Evidence of Burndown Chart for Sprint 2
+Burndown Chart image from Jira
