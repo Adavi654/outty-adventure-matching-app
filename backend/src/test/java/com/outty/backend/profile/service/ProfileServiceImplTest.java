@@ -4,13 +4,13 @@ import com.outty.backend.auth.entity.User;
 import com.outty.backend.auth.repository.UserRepository;
 import com.outty.backend.common.exception.ProfileAlreadyExistsException;
 import com.outty.backend.common.exception.ProfileNotFoundException;
+import com.outty.backend.profile.dto.request.AdventurePreferenceRequest;
 import com.outty.backend.profile.dto.request.ProfileRequest;
 import com.outty.backend.profile.dto.request.UpdateProfileRequest;
 import com.outty.backend.profile.dto.response.ProfileResponse;
 import com.outty.backend.profile.entity.Profile;
-import com.outty.backend.profile.entity.enums.Gender;
-import com.outty.backend.profile.entity.enums.InterestedIn;
-import com.outty.backend.profile.entity.enums.RelationshipGoal;
+import com.outty.backend.profile.entity.ProfileAdventure;
+import com.outty.backend.profile.entity.enums.*;
 import com.outty.backend.profile.repository.ProfileRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,7 +82,8 @@ class ProfileServiceImplTest {
                 1L, "City", "State", "Country", Gender.MALE,
                 LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
                 List.of("https://example.com/photo-1.jpg", "https://example.com/photo-2.jpg"),
-                null, null, null
+                null, null, null,
+                List.of()
         );
 
         ProfileResponse response = profileService.createProfile(1L, request);
@@ -120,7 +121,8 @@ class ProfileServiceImplTest {
                 "NewCity", "NewState", "NewCountry", Gender.MALE,
                 LocalDate.of(1991,2,2), "NewBio", InterestedIn.BOTH, RelationshipGoal.BOTH,
                 List.of("https://example.com/photo-3.jpg"),
-                null, null, null
+                null, null, null,
+                List.of()
         );
 
         ProfileResponse response = profileService.updateProfile(1L, request);
@@ -149,7 +151,8 @@ class ProfileServiceImplTest {
                 1L, "City", "State", "Country", Gender.FEMALE,
                 LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.FRIENDSHIPS,
                 List.of(),
-                null, null, null
+                null, null, null,
+                List.of()
         );
 
         assertThrows(ProfileAlreadyExistsException.class, () -> profileService.createProfile(1L, request));
@@ -171,7 +174,8 @@ class ProfileServiceImplTest {
                 List.of("https://example.com/photo-3.jpg"),
                 "https://instagram.com/outty_hiker",
                 "https://facebook.com/outty.hiker",
-                "https://x.com/outty_hiker"
+                "https://x.com/outty_hiker",
+                List.of()
         );
 
         ProfileResponse response = profileService.createProfile(1L, request);
@@ -194,7 +198,8 @@ class ProfileServiceImplTest {
                 List.of("https://example.com/photo-3.jpg"),
                 "https://instagram.com/new_handle",
                 "https://facebook.com/outty.hiker",
-                "https://x.com/outty_hiker"
+                "https://x.com/outty_hiker",
+                List.of()
         );
 
         ProfileResponse response = profileService.updateProfile(1L, request);
@@ -216,7 +221,8 @@ class ProfileServiceImplTest {
                 List.of("https://example.com/photo-3.jpg"),
                 "https://instagram.com/outty_hiker",
                 "",
-                null
+                null,
+                List.of()
         );
 
         ProfileResponse response = profileService.updateProfile(1L, request);
@@ -238,5 +244,62 @@ class ProfileServiceImplTest {
         assertEquals("https://instagram.com/outty_hiker", response.instagramUrl());
         assertEquals("https://facebook.com/outty.hiker", response.facebookUrl());
         assertEquals("https://x.com/outty_hiker", response.xUrl());
+    }
+
+    @Test
+    void shouldCreateProfileWithAdventurePreferences() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(profileRepository.existsByUserId(1L)).thenReturn(false);
+        when(profileRepository.save(any(Profile.class))).thenAnswer(invocation -> {
+            Profile saved = invocation.getArgument(0);
+            saved.setId(2L);
+            return saved;
+        });
+
+        ProfileRequest request = new ProfileRequest(
+                1L, "City", "State", "Country", Gender.MALE,
+                LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                List.of(),
+                null, null, null,
+                List.of(
+                        new AdventurePreferenceRequest(AdventureType.HIKING, SkillLevel.INTERMEDIATE),
+                        new AdventurePreferenceRequest(AdventureType.CAMPING, SkillLevel.BEGINNER)
+                )
+        );
+
+        ProfileResponse response = profileService.createProfile(1L, request);
+
+        assertEquals(2, response.adventures().size());
+        assertEquals(AdventureType.HIKING, response.adventures().get(0).adventureType());
+        assertEquals(SkillLevel.INTERMEDIATE, response.adventures().get(0).skillLevel());
+    }
+
+    @Test
+    void shouldUpdateAdventurePreferences() {
+        ProfileAdventure existingAdventure = ProfileAdventure.builder()
+                .adventureType(AdventureType.HIKING)
+                .skillLevel(SkillLevel.BEGINNER)
+                .build();
+        profile.getAdventures().add(existingAdventure);
+        existingAdventure.setProfile(profile);
+
+        when(profileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
+        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                "City", "State", "Country", Gender.MALE,
+                LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                List.of(),
+                null, null, null,
+                List.of(
+                        new AdventurePreferenceRequest(AdventureType.CLIMBING, SkillLevel.ADVANCED)
+                )
+        );
+
+        ProfileResponse response = profileService.updateProfile(1L, request);
+
+        assertEquals(1, response.adventures().size());
+        assertEquals(AdventureType.CLIMBING, response.adventures().get(0).adventureType());
+        assertEquals(SkillLevel.ADVANCED, response.adventures().get(0).skillLevel());
     }
 }

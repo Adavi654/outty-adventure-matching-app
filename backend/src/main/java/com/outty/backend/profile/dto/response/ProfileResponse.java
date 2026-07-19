@@ -23,6 +23,7 @@ public record ProfileResponse(
         List<String> photos,
         String instagramUrl,
         String facebookUrl,
-        String xUrl
+        String xUrl,
+        List<AdventurePreferenceResponse> adventures
 ) {
 }

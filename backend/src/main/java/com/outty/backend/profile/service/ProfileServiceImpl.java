@@ -11,7 +11,8 @@ import com.outty.backend.profile.entity.Profile;
 import com.outty.backend.profile.mapper.ProfileMapper;
 import com.outty.backend.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;import com.outty.backend.profile.dto.request.UpdateProfileRequest;
+import org.springframework.stereotype.Service;
+import com.outty.backend.profile.dto.request.UpdateProfileRequest;
 
 @Service
 @RequiredArgsConstructor

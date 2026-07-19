@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { ADVENTURE_OPTIONS, SKILL_LEVEL_OPTIONS } from "../constants/adventures";
+
 
 const MAX_PHOTOS = 10;
 const EMPTY_FORM_VALUES = {
@@ -13,6 +15,7 @@ const EMPTY_FORM_VALUES = {
   instagramUrl: '',
   facebookUrl: '',
   xUrl: '',
+  adventures: [],
 }
 
 function ProfileForm({
@@ -28,6 +31,7 @@ function ProfileForm({
   instagramUrl: initialValues?.instagramUrl ?? '',
   facebookUrl: initialValues?.facebookUrl ?? '',
   xUrl: initialValues?.xUrl ?? '',
+    adventures: initialValues?.adventures || [],
 });
   
   const [photoError, setPhotoError] = useState("");
@@ -66,6 +70,40 @@ function ProfileForm({
     setFormData((prev) => ({
       ...prev,
       photos: (prev.photos || []).filter((photo) => photo !== photoToRemove),
+    }));
+  };
+
+  const isAdventureSelected = (adventureType) =>
+      (formData.adventures || []).some((item) => item.adventureType === adventureType);
+
+  const getAdventureSkillLevel = (adventureType) =>
+      (formData.adventures || []).find((item) => item.adventureType === adventureType)?.skillLevel || 'BEGINNER';
+
+  const toggleAdventure = (adventureType) => {
+    setFormData((prev) => {
+      const adventures = prev.adventures || [];
+      const isSelected = adventures.some((item) => item.adventureType === adventureType);
+
+      if (isSelected) {
+        return {
+          ...prev,
+          adventures: adventures.filter((item) => item.adventureType !== adventureType),
+        };
+      }
+
+      return {
+        ...prev,
+        adventures: [...adventures, { adventureType, skillLevel: 'BEGINNER' }],
+      };
+    });
+  };
+
+  const updateAdventureSkillLevel = (adventureType, skillLevel) => {
+    setFormData((prev) => ({
+      ...prev,
+      adventures: (prev.adventures || []).map((item) =>
+          item.adventureType === adventureType ? { ...item, skillLevel } : item
+      ),
     }));
   };
 
@@ -195,6 +233,46 @@ function ProfileForm({
           <option value="BOTH">Both</option>
         </select>
       </div>
+
+
+      <fieldset className="form-field adventure-fieldset">
+        <legend>Adventure Interests</legend>
+        <p className="helper-text">
+          Select the activities you enjoy and set your experience level for each.
+        </p>
+        <div className="adventure-list">
+          {ADVENTURE_OPTIONS.map(({ value, label }) => {
+            const selected = isAdventureSelected(value);
+
+            return (
+                <div className={`adventure-item${selected ? ' adventure-item-selected' : ''}`} key={value}>
+                  <label className="adventure-checkbox-label">
+                    <input
+                        type="checkbox"
+                        checked={selected}
+                        onChange={() => toggleAdventure(value)}
+                    />
+                    <span>{label}</span>
+                  </label>
+                  {selected && (
+                      <select
+                          className="adventure-skill-select"
+                          value={getAdventureSkillLevel(value)}
+                          onChange={(event) => updateAdventureSkillLevel(value, event.target.value)}
+                          aria-label={`Skill level for ${label}`}
+                      >
+                        {SKILL_LEVEL_OPTIONS.map((skill) => (
+                            <option key={skill.value} value={skill.value}>
+                              {skill.label}
+                            </option>
+                        ))}
+                      </select>
+                  )}
+                </div>
+            );
+          })}
+        </div>
+      </fieldset>
 
       <div className="form-field">
         <label htmlFor="photo-upload">Upload Photos</label>
