@@ -15,17 +15,6 @@ const EMPTY_FORM_VALUES = {
   xUrl: '',
 }
 
-const EMPTY_FORM_VALUES = {
-  city: "",
-  state: "",
-  country: "",
-  gender: "",
-  birthDate: "",
-  bio: "",
-  interestedIn: "",
-  relationshipGoal: "",
-};
-
 function ProfileForm({
   mode = "create",
   initialValues = EMPTY_FORM_VALUES,
