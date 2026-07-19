@@ -168,6 +168,7 @@ class ProfileServiceImplTest {
         ProfileRequest request = new ProfileRequest(
                 1L, "City", "State", "Country", Gender.MALE,
                 LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+            
                 "https://instagram.com/outty_hiker",
                 "https://facebook.com/outty.hiker",
                 "https://x.com/outty_hiker"
@@ -190,6 +191,7 @@ class ProfileServiceImplTest {
         UpdateProfileRequest request = new UpdateProfileRequest(
                 "City", "State", "Country", Gender.MALE,
                 LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                List.of("https://example.com/photo-3.jpg"),
                 "https://instagram.com/new_handle",
                 "https://facebook.com/outty.hiker",
                 "https://x.com/outty_hiker"
@@ -211,6 +213,7 @@ class ProfileServiceImplTest {
         UpdateProfileRequest request = new UpdateProfileRequest(
                 "City", "State", "Country", Gender.MALE,
                 LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                List.of("https://example.com/photo-3.jpg"),
                 "https://instagram.com/outty_hiker",
                 "",
                 null
