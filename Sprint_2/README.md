@@ -1,4 +1,4 @@
-# Sprint 1
+# Sprint 2
 
 Sprint backlog, sprint review artifacts, screenshots, and deliverables.
 
