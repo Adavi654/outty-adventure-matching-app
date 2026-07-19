@@ -60,6 +60,7 @@ public record UpdateProfileRequest(
                 regexp = "^(?:\\s*|https://(?:www\\.)?(?:x\\.com|twitter\\.com)/[A-Za-z0-9_]{1,15}/?(?:[?#].*)?)$",
                 message = "X URL must be a valid HTTPS X or Twitter profile URL"
         )
-        String xUrl
+        String xUrl,
+        List<AdventurePreferenceRequest> adventures
 ) {    
 }

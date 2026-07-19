@@ -140,6 +140,20 @@ return (
           <p className="bio-text">{profile.bio}</p>
         </section>
 
+        {profile.adventures?.length > 0 && (
+            <section className="adventures-section">
+              <h3>Adventure Interests</h3>
+              <div className="adventure-tags">
+                {profile.adventures.map(({ adventureType, skillLevel }) => (
+                    <div className="adventure-tag" key={adventureType}>
+                      <span className="adventure-tag-name">{formatEnum(adventureType)}</span>
+                      <span className="adventure-tag-skill">{formatEnum(skillLevel)}</span>
+                    </div>
+                ))}
+              </div>
+            </section>
+        )}
+
         <button onClick={() => setIsEditing(true)}>Edit Profile</button>
       </div>
     ) : (

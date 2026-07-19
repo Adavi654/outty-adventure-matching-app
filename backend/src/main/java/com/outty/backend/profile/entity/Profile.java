@@ -72,6 +72,10 @@ public class Profile {
     @Column(name = "x_url", nullable = true, length = 255)
     private String xUrl;
 
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<ProfileAdventure> adventures = new ArrayList<>();
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
