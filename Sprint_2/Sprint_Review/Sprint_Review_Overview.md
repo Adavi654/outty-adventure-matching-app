@@ -7,12 +7,12 @@ What we feel went well for Sprint 2:
 - Continuous Integration was implemented flawlessly. It has already save us from several major logic conflicts since its implemenetation.
 - Consolidating the update and create profile pages went smoothly and turned out as we wanted it to.
 - Implementing adventure interests and skill levels into the profile information worked seamlessly.
-- No major conflicts when merging the different additions that were made to our user profiles by each user together (social media links, photos, and adventure interests/skill levels).
+- Final result of merging all additions from each member seems to have come together comfortably well.
 
 What we feel did not go well for Sprint 2:
-- 
-- Login for existing users is experiencing latency. We have been working on troubleshooting.
+- Small conflicts when merging the different additions that were made to our user profiles by each member (social media links, photos, and adventure interests/skill levels). Resolved all issues, but need to implement manual pipeline checks to avoid such issues in the future.
 
 What we can improve upon for the next sprint:
-- We need to make the create profile and update profile pages mutually exclusive.
-- We need to implement Google SSO during the next sprint.
+- Attempting to edit the profile now results in a save fail issue due to hidden conflicts between edit profile page and adventure interests/skill levels. Need to determine the cause and fix.
+- We need to add a button on the banner for the user to return to their profile.
+- We need to make UI design more consistent across pages.
