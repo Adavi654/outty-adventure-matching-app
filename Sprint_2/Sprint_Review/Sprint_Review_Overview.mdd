@@ -1,0 +1,18 @@
+Sprint 2 Review
+
+During the sprint review, we discussed the implementation of each user story and how they turned out via a demo.
+We also discussed what went well during this past sprint, what went poorly, and what we could improve upon for the next.
+
+What we feel went well for Sprint 2:
+- Continuous Integration was implemented flawlessly. It has already save us from several major logic conflicts since its implemenetation.
+- Consolidating the update and create profile pages went smoothly and turned out as we wanted it to.
+- Implementing adventure interests and skill levels into the profile information worked seamlessly.
+- No major conflicts when merging the different additions that were made to our user profiles by each user together (social media links, photos, and adventure interests/skill levels).
+
+What we feel did not go well for Sprint 2:
+- 
+- Login for existing users is experiencing latency. We have been working on troubleshooting.
+
+What we can improve upon for the next sprint:
+- We need to make the create profile and update profile pages mutually exclusive.
+- We need to implement Google SSO during the next sprint.
