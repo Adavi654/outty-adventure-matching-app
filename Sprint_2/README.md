@@ -12,7 +12,7 @@ While scheduling, we determined that we would again be at 100% capacity for the 
 
 Were we to directly use our previous sprint as a baseline, our calculated target points for Sprint 2 would by 21. However, based on our conclusion that we were operating at two-thirds of our potential capacity, we decided to schedule an extra 50% of the points that we worked on for Sprint 1, resulting in 31.5 points (rounding down to 31). This is the final point load that we decided to take for Sprint 2.
 
-As an addition, after completing the stories scheduled for this Sprint, we still had a comfortable amount of time left over. Most of the group opted to work on documenting at this point, but because there was a limited amount of work remaining, Antoine Davis opted to begin researching requirements for continuous deployment. We estimated these efforts to be 3 story points and added this to the sprint, bringing our final total to 34 story points.
+As an addition, after completing the stories scheduled for this sprint, we still had a comfortable amount of time left over. Most of the group opted to work on documenting at this point, but because there was a limited amount of work remaining, Antoine Davis opted to begin researching requirements for continuous deployment. We estimated these efforts to be 3 story points and added this to the sprint, bringing our final total to 34 story points.
 
 _________________________
 
