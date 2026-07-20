@@ -1,3 +1,3 @@
 # Mobbing Description
 
-Discussed security-related concerns, bettering overall design, 
+Discussed security-related concerns, bettering overall design, and implemented JWT token generator.
