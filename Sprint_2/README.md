@@ -6,11 +6,13 @@ _________________________
 
 # 1. Forecast
 
-Because this was our team's first sprint, we did not have a historical velocity to use when estimating our sprint capacity. As a result, we based our forecast on the work we planned for the sprint rather than on past performance.
+During our first sprint, we scheduled the four stories with the lowest point total, resulting in a work load of 21 story points. With a team operating at 100% capacity, we comfortably finished ahead of schedule, setting this as our normalized velocity. However, while discussing the results of the sprint, we felt as though we were operating at approximately two-thirds of our potential capacity, which we opted to take into consideration while scheduling Sprint 2.
 
-After estimating the effort for each user story using story points, we divided the 12 user stories across our three sprints. We intentionally scheduled the four user stories with the lowest combined effort in the first sprint, resulting in a forecast of 21 story points for Sprint 1. This conservative estimate allowed us to establish an initial team velocity while reducing the risk of overcommitting during our first iteration.
+While scheduling, we determined that we would again be at 100% capacity for the duration of Sprint 2. Therefore, no adjustments needed to be made to accommodate fluctuations.
 
-At the end of the sprint, we planned to compare our completed story points with this forecast to establish a baseline velocity that would assist us in planning for the remaining sprints.
+Were we to directly use our previous sprint as a baseline, our calculated target points for Sprint 2 would by 21. However, based on our conclusion that we were operating at two-thirds of our potential capacity, we decided to schedule an extra 50% of the points that we worked on for Sprint 1, resulting in 31.5 points (rounding down to 31). This is the final point load that we decided to take for Sprint 2.
+
+As an addition, after completing the stories scheduled for this Sprint, we still had a comfortable amount of time left over. Most of the group opted to work on documenting at this point, but because there was a limited amount of work remaining, Antoine Davis opted to begin researching requirements for continuous deployment. We estimated these efforts to be 3 story points and added this to the sprint, bringing our final total to 34 story points.
 
 _________________________
 
