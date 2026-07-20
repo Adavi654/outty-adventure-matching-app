@@ -159,6 +159,90 @@ class ProfileServiceImplTest {
     }
 
     @Test
+    void shouldCreateProfileWithNoImages() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(profileRepository.existsByUserId(1L)).thenReturn(false);
+        when(profileRepository.save(any(Profile.class))).thenAnswer(invocation -> {
+            Profile saved = invocation.getArgument(0);
+            saved.setId(2L);
+            return saved;
+        });
+
+        ProfileRequest request = new ProfileRequest(
+                1L, "City", "State", "Country", Gender.FEMALE,
+                LocalDate.of(1990,1,1), "Bio", InterestedIn.BOTH, RelationshipGoal.FRIENDSHIPS,
+                List.of(),
+                null, null, null,
+                List.of()
+        );
+
+        ProfileResponse response = profileService.createProfile(1L, request);
+
+        assertNotNull(response.photos(), "List should be empty, not null");
+        assertTrue(response.photos().isEmpty(), "Profile should have zero images");
+    }
+    
+    @Test
+    void shouldCreateProfileWithSingleImage() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(profileRepository.existsByUserId(1L)).thenReturn(false);
+        when(profileRepository.save(any(Profile.class))).thenAnswer(invocation -> {
+            Profile saved = invocation.getArgument(0);
+            saved.setId(2L);
+            return saved;
+        });
+
+        String testImageUrl = "https://example.com/profile-pic.jpg";
+
+        ProfileRequest request = new ProfileRequest(
+                1L, "City", "State", "Country", Gender.MALE,
+                LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                List.of(testImageUrl),
+                null, null, null,
+                List.of()
+        );
+
+        ProfileResponse response = profileService.createProfile(1L, request);
+
+        assertNotNull(response.photos(), "Image list should not be null");
+        assertEquals(1, response.photos().size(), "Profile should have exactly one image");
+        assertEquals(testImageUrl, response.photos().get(0), "The saved image URL should match the input");
+        
+        verify(profileRepository).save(any(Profile.class));
+    }
+
+    @Test
+    void shouldCreateProfileWithMultipleImages() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(profileRepository.existsByUserId(1L)).thenReturn(false);
+        when(profileRepository.save(any(Profile.class))).thenAnswer(invocation -> {
+            Profile saved = invocation.getArgument(0);
+            saved.setId(2L);
+            return saved;
+        });
+
+        String testImageUrl1 = "https://example.com/profile-pic1.jpg";
+        String testImageUrl2 = "https://example.com/profile-pic2.jpg";
+
+        ProfileRequest request = new ProfileRequest(
+                1L, "City", "State", "Country", Gender.MALE,
+                LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                List.of(testImageUrl1, testImageUrl2),
+                null, null, null,
+                List.of()
+        );
+
+        ProfileResponse response = profileService.createProfile(1L, request);
+
+        assertNotNull(response.photos(), "Image list should not be null");
+        assertEquals(2, response.photos().size(), "Profile should have exactly two images");
+        assertEquals(testImageUrl1, response.photos().get(0), "The saved image URL should match the input");
+        assertEquals(testImageUrl2, response.photos().get(1), "The saved image URL should match the input");
+        
+        verify(profileRepository).save(any(Profile.class));
+    }
+    
+    @Test
     void shouldCreateProfileWithValidSocialUrls() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(profileRepository.existsByUserId(1L)).thenReturn(false);
@@ -171,7 +255,7 @@ class ProfileServiceImplTest {
         ProfileRequest request = new ProfileRequest(
                 1L, "City", "State", "Country", Gender.MALE,
                 LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
-                List.of("https://example.com/photo-3.jpg"),
+                List.of(),
                 "https://instagram.com/outty_hiker",
                 "https://facebook.com/outty.hiker",
                 "https://x.com/outty_hiker",
@@ -195,7 +279,7 @@ class ProfileServiceImplTest {
         UpdateProfileRequest request = new UpdateProfileRequest(
                 "City", "State", "Country", Gender.MALE,
                 LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
-                List.of("https://example.com/photo-3.jpg"),
+                List.of(),
                 "https://instagram.com/new_handle",
                 "https://facebook.com/outty.hiker",
                 "https://x.com/outty_hiker",
@@ -218,7 +302,7 @@ class ProfileServiceImplTest {
         UpdateProfileRequest request = new UpdateProfileRequest(
                 "City", "State", "Country", Gender.MALE,
                 LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
-                List.of("https://example.com/photo-3.jpg"),
+                List.of(),
                 "https://instagram.com/outty_hiker",
                 "",
                 null,
@@ -301,5 +385,39 @@ class ProfileServiceImplTest {
         assertEquals(1, response.adventures().size());
         assertEquals(AdventureType.CLIMBING, response.adventures().get(0).adventureType());
         assertEquals(SkillLevel.ADVANCED, response.adventures().get(0).skillLevel());
+    }
+
+    @Test
+    void shouldCreateProfileWithPhotosSocialsAndAdventurePreferences() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(profileRepository.existsByUserId(1L)).thenReturn(false);
+        when(profileRepository.save(any(Profile.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        ProfileRequest request = new ProfileRequest(
+                1L, "City", "State", "Country", Gender.MALE,
+                LocalDate.of(1990, 1, 1), "Bio", InterestedIn.BOTH, RelationshipGoal.BOTH,
+                List.of("https://img.com/1.jpg", "https://img.com/2.jpg"),
+                "https://instagram.com/user",
+                "https://facebook.com/user",
+                "https://x.com/user",
+                List.of(
+                        new AdventurePreferenceRequest(AdventureType.CLIMBING, SkillLevel.ADVANCED)
+                )
+        );
+
+        ProfileResponse response = profileService.createProfile(1L, request);
+
+        assertEquals(2, response.photos().size());
+        assertEquals(List.of("https://img.com/1.jpg", "https://img.com/2.jpg"), response.photos());
+        
+        assertEquals("https://instagram.com/user", response.instagramUrl());
+        assertEquals("https://facebook.com/user", response.facebookUrl());
+        assertEquals("https://x.com/user", response.xUrl());
+
+        assertEquals(1, response.adventures().size());
+        assertEquals(AdventureType.CLIMBING, response.adventures().get(0).adventureType());
+        assertEquals(SkillLevel.ADVANCED, response.adventures().get(0).skillLevel());
+        
+        verify(profileRepository).save(any(Profile.class));
     }
 }
