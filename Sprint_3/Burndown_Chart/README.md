@@ -1,1 +1,1 @@
-Burndown Chart for Sprint 3
+Burndown Chart image for Sprint 3
