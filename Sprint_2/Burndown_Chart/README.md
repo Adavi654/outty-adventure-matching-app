@@ -1,1 +1,1 @@
-Burndown Chart image from Jira
+Burndown Chart image
