@@ -12,6 +12,8 @@ _________________________
 
 # 2. Continuous Integration Evidence
 
+Evidence of our team's Continuous Integration system:
+
 [View GitHub Actions evidence](https://github.com/Adavi654/outty-adventure-matching-app/actions)
 
 _________________________
