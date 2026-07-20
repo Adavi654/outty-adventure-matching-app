@@ -1,1 +1,1 @@
-Evidence of a Sprint Review for Sprint 3
+Evidence of Sprint Review for Sprint 3
