@@ -1,7 +1,11 @@
 package com.outty.backend.matching.provider;
 
 import com.outty.backend.matching.dto.response.PotentialMatchResponse;
+import com.outty.backend.profile.dto.response.AdventurePreferenceResponse;
+import com.outty.backend.profile.entity.enums.AdventureType;
 import com.outty.backend.profile.entity.enums.InterestedIn;
+import com.outty.backend.profile.entity.enums.RelationshipGoal;
+import com.outty.backend.profile.entity.enums.SkillLevel;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -22,7 +26,11 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     LocalDate.of(1992, 4, 15),
                     "Weekend hiker who enjoys discovering new trails.",
                     InterestedIn.BOTH,
-                    "Open to friendship or a long-term relationship",
+                    RelationshipGoal.BOTH,
+                    List.of(
+                            new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.INTERMEDIATE),
+                            new AdventurePreferenceResponse(AdventureType.CAMPING, SkillLevel.BEGINNER)
+                    ),
                     true
             ),
             new PotentialMatchResponse(
@@ -35,8 +43,12 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Male",
                     LocalDate.of(1989, 8, 22),
                     "Kayaking enthusiast and occasional camper.",
-                    InterestedIn.FRIENDSHIPS,
-                    "Meet new outdoor friends",
+                    InterestedIn.WOMEN,
+                    RelationshipGoal.FRIENDSHIPS,
+                    List.of(
+                            new AdventurePreferenceResponse(AdventureType.KAYAKING, SkillLevel.ADVANCED),
+                            new AdventurePreferenceResponse(AdventureType.CAMPING, SkillLevel.INTERMEDIATE)
+                    ),
                     true
             ),
             new PotentialMatchResponse(
@@ -49,8 +61,12 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Female",
                     LocalDate.of(1994, 2, 10),
                     "Always ready for a scenic hike or weekend road trip.",
-                    InterestedIn.FRIENDSHIPS,
-                    "Build meaningful friendships",
+                    InterestedIn.MEN,
+                    RelationshipGoal.FRIENDSHIPS,
+                    List.of(
+                            new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.EXPERT),
+                            new AdventurePreferenceResponse(AdventureType.BACKPACKING, SkillLevel.ADVANCED)
+                    ),
                     true
             ),
             new PotentialMatchResponse(
@@ -64,7 +80,11 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     null,
                     "Nature photographer who enjoys exploring national parks.",
                     InterestedIn.BOTH,
-                    "Meet people who enjoy the outdoors",
+                    RelationshipGoal.BOTH,
+                    List.of(
+                            new AdventurePreferenceResponse(AdventureType.CLIMBING, SkillLevel.INTERMEDIATE),
+                            new AdventurePreferenceResponse(AdventureType.TRAVELING, SkillLevel.ADVANCED)
+                    ),
                     true
             ),
             new PotentialMatchResponse(
@@ -77,8 +97,12 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Female",
                     LocalDate.of(1991, 11, 5),
                     "Trail runner looking for someone to share new experiences.",
-                    InterestedIn.RELATIONSHIPS,
-                    "Long-term relationship",
+                    InterestedIn.MEN,
+                    RelationshipGoal.RELATIONSHIPS,
+                    List.of(
+                            new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.INTERMEDIATE),
+                            new AdventurePreferenceResponse(AdventureType.TRAVELING, SkillLevel.BEGINNER)
+                    ),
                     true
             )
     );

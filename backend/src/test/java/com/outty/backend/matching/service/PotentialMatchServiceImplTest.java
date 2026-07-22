@@ -5,8 +5,13 @@ import com.outty.backend.common.exception.PotentialMatchUnavailableException;
 import com.outty.backend.common.exception.ProfileNotFoundException;
 import com.outty.backend.matching.dto.response.PotentialMatchResponse;
 import com.outty.backend.matching.provider.PotentialMatchProvider;
+import com.outty.backend.profile.dto.response.AdventurePreferenceResponse;
 import com.outty.backend.profile.entity.Profile;
+import com.outty.backend.profile.entity.ProfileAdventure;
+import com.outty.backend.profile.entity.enums.AdventureType;
 import com.outty.backend.profile.entity.enums.InterestedIn;
+import com.outty.backend.profile.entity.enums.RelationshipGoal;
+import com.outty.backend.profile.entity.enums.SkillLevel;
 import com.outty.backend.profile.repository.ProfileRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +62,14 @@ class PotentialMatchServiceImplTest {
                 .city("Atlanta")
                 .state("Georgia")
                 .country("United States")
-                .interestedIn(InterestedIn.FRIENDSHIPS)
+                .interestedIn(InterestedIn.BOTH)
+                .relationshipGoal(RelationshipGoal.FRIENDSHIPS)
+                .adventures(new ArrayList<>(List.of(
+                        ProfileAdventure.builder()
+                                .adventureType(AdventureType.HIKING)
+                                .skillLevel(SkillLevel.INTERMEDIATE)
+                                .build()
+                )))
                 .build();
     }
 
@@ -68,7 +81,8 @@ class PotentialMatchServiceImplTest {
                 "Atlanta",
                 "Georgia",
                 "United States",
-                InterestedIn.FRIENDSHIPS
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures()
         );
 
         when(profileRepository.findByUserId(USER_ID))
@@ -99,7 +113,7 @@ class PotentialMatchServiceImplTest {
 
     @Test
     void shouldTreatBothAsCompatible() {
-        requester.setInterestedIn(InterestedIn.BOTH);
+        requester.setRelationshipGoal(RelationshipGoal.BOTH);
 
         PotentialMatchResponse friendshipCandidate = candidate(
                 2L,
@@ -107,7 +121,8 @@ class PotentialMatchServiceImplTest {
                 "Atlanta",
                 "Georgia",
                 "United States",
-                InterestedIn.FRIENDSHIPS
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures()
         );
         PotentialMatchResponse relationshipCandidate = candidate(
                 3L,
@@ -115,7 +130,8 @@ class PotentialMatchServiceImplTest {
                 "Atlanta",
                 "Georgia",
                 "United States",
-                InterestedIn.RELATIONSHIPS
+                RelationshipGoal.RELATIONSHIPS,
+                defaultAdventures()
         );
 
         when(profileRepository.findByUserId(USER_ID))
@@ -140,7 +156,8 @@ class PotentialMatchServiceImplTest {
                 "Atlanta",
                 "Georgia",
                 "United States",
-                InterestedIn.FRIENDSHIPS
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures()
         );
         PotentialMatchResponse incompatibleCandidate = candidate(
                 2L,
@@ -148,7 +165,8 @@ class PotentialMatchServiceImplTest {
                 "Atlanta",
                 "Georgia",
                 "United States",
-                InterestedIn.RELATIONSHIPS
+                RelationshipGoal.RELATIONSHIPS,
+                defaultAdventures()
         );
         PotentialMatchResponse compatibleCandidate = candidate(
                 3L,
@@ -156,7 +174,8 @@ class PotentialMatchServiceImplTest {
                 "Atlanta",
                 "Georgia",
                 "United States",
-                InterestedIn.BOTH
+                RelationshipGoal.BOTH,
+                defaultAdventures()
         );
         PotentialMatchResponse differentCountryCandidate = candidate(
                 4L,
@@ -164,7 +183,8 @@ class PotentialMatchServiceImplTest {
                 "Toronto",
                 "Ontario",
                 "Canada",
-                InterestedIn.BOTH
+                RelationshipGoal.BOTH,
+                defaultAdventures()
         );
 
         when(profileRepository.findByUserId(USER_ID))
@@ -186,6 +206,53 @@ class PotentialMatchServiceImplTest {
     }
 
     @Test
+    void shouldRequireSharedAdventureInterest() {
+        PotentialMatchResponse noSharedAdventureCandidate = candidate(
+                2L,
+                "Jordan",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                List.of(
+                        new AdventurePreferenceResponse(
+                                AdventureType.KAYAKING,
+                                SkillLevel.ADVANCED
+                        )
+                )
+        );
+        PotentialMatchResponse sharedAdventureCandidate = candidate(
+                3L,
+                "Avery",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                List.of(
+                        new AdventurePreferenceResponse(
+                                AdventureType.HIKING,
+                                SkillLevel.EXPERT
+                        )
+                )
+        );
+
+        when(profileRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(requester));
+        when(potentialMatchProvider.getCandidates())
+                .thenReturn(List.of(
+                        noSharedAdventureCandidate,
+                        sharedAdventureCandidate
+                ));
+
+        List<PotentialMatchResponse> matches =
+                potentialMatchService.getPotentialMatches(USER_ID);
+
+        assertEquals(List.of(3L), matches.stream()
+                .map(PotentialMatchResponse::userId)
+                .toList());
+    }
+
+    @Test
     void shouldOrderSameCityBeforeSameStateAndSameCountry() {
         PotentialMatchResponse countryCandidate = candidate(
                 2L,
@@ -193,7 +260,8 @@ class PotentialMatchServiceImplTest {
                 "Denver",
                 "Colorado",
                 "United States",
-                InterestedIn.FRIENDSHIPS
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures()
         );
         PotentialMatchResponse stateCandidate = candidate(
                 3L,
@@ -201,7 +269,8 @@ class PotentialMatchServiceImplTest {
                 "Savannah",
                 "Georgia",
                 "United States",
-                InterestedIn.FRIENDSHIPS
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures()
         );
         PotentialMatchResponse cityCandidate = candidate(
                 4L,
@@ -209,7 +278,8 @@ class PotentialMatchServiceImplTest {
                 "Atlanta",
                 "Georgia",
                 "United States",
-                InterestedIn.FRIENDSHIPS
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures()
         );
 
         when(profileRepository.findByUserId(USER_ID))
@@ -268,13 +338,23 @@ class PotentialMatchServiceImplTest {
         assertSame(providerFailure, exception.getCause());
     }
 
+    private List<AdventurePreferenceResponse> defaultAdventures() {
+        return List.of(
+                new AdventurePreferenceResponse(
+                        AdventureType.HIKING,
+                        SkillLevel.INTERMEDIATE
+                )
+        );
+    }
+
     private PotentialMatchResponse candidate(
             Long userId,
             String firstName,
             String city,
             String state,
             String country,
-            InterestedIn interestedIn
+            RelationshipGoal relationshipGoal,
+            List<AdventurePreferenceResponse> adventures
     ) {
         return new PotentialMatchResponse(
                 userId,
@@ -286,8 +366,9 @@ class PotentialMatchServiceImplTest {
                 "Prefer not to say",
                 LocalDate.of(1990, 1, 1),
                 "Demo bio",
-                interestedIn,
-                "Meet new people",
+                InterestedIn.BOTH,
+                relationshipGoal,
+                adventures,
                 true
         );
     }

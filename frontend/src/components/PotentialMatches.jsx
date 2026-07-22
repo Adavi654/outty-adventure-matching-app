@@ -1,18 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getPotentialMatches } from '../services/matchApi'
+import { formatEnum } from '../utils/formatters'
 import '../styles/PotentialMatches.css'
 
 const SWIPE_THRESHOLD = 100
 const DECISION_DELAY = 350
-
-function formatInterestedIn(value) {
-  if (!value) {
-    return 'Not provided'
-  }
-
-  return value.charAt(0) + value.slice(1).toLowerCase()
-}
 
 function getRequestError(status) {
   if (status === 404) {
@@ -313,14 +306,32 @@ function PotentialMatches() {
             <dd>{match.birthDate || 'Not provided'}</dd>
           </div>
           <div>
-            <dt>Interested in</dt>
-            <dd>{formatInterestedIn(match.interestedIn)}</dd>
+            <dt>Gender preference</dt>
+            <dd>{formatEnum(match.interestedIn)}</dd>
           </div>
           <div>
             <dt>Relationship goal</dt>
-            <dd>{match.relationshipGoal}</dd>
+            <dd>{formatEnum(match.relationshipGoal)}</dd>
           </div>
         </dl>
+
+        {match.adventures?.length > 0 && (
+          <section className="match-adventures">
+            <h3>Adventure interests</h3>
+            <div className="match-adventure-tags">
+              {match.adventures.map(({ adventureType, skillLevel }) => (
+                <div className="match-adventure-tag" key={adventureType}>
+                  <span className="match-adventure-tag-name">
+                    {formatEnum(adventureType)}
+                  </span>
+                  <span className="match-adventure-tag-skill">
+                    {formatEnum(skillLevel)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         <p className="match-bio">{match.bio}</p>
 

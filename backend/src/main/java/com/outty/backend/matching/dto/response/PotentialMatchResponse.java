@@ -1,8 +1,11 @@
 package com.outty.backend.matching.dto.response;
 
+import com.outty.backend.profile.dto.response.AdventurePreferenceResponse;
 import com.outty.backend.profile.entity.enums.InterestedIn;
+import com.outty.backend.profile.entity.enums.RelationshipGoal;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record PotentialMatchResponse(
         Long userId,
@@ -15,7 +18,8 @@ public record PotentialMatchResponse(
         LocalDate birthDate,
         String bio,
         InterestedIn interestedIn,
-        String relationshipGoal,
+        RelationshipGoal relationshipGoal,
+        List<AdventurePreferenceResponse> adventures,
         boolean demoData
 ) {
 }
