@@ -8,9 +8,12 @@ import com.outty.backend.profile.dto.response.ProfileResponse;
 import com.outty.backend.profile.dto.request.UpdateProfileRequest;
 import com.outty.backend.auth.entity.User;
 import com.outty.backend.profile.entity.ProfileAdventure;
+import com.outty.backend.profile.entity.enums.AdventureType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ProfileMapper {
     private ProfileMapper() {
@@ -77,19 +80,29 @@ public class ProfileMapper {
     }
 
     private static void setAdventures(Profile profile, List<AdventurePreferenceRequest> adventures) {
-        profile.getAdventures().clear();
 
         if (adventures == null || adventures.isEmpty()) {
+            profile.getAdventures().clear();
             return;
         }
+        Map<AdventureType, ProfileAdventure> existingByType = profile.getAdventures().stream()
+                .collect(Collectors.toMap(ProfileAdventure::getAdventureType, adventure -> adventure, (existing, replacement) -> existing));
 
         for (AdventurePreferenceRequest adventure : adventures) {
+            ProfileAdventure existing = existingByType.remove(adventure.adventureType());
+            if (existing != null) {
+                existing.setSkillLevel(adventure.skillLevel());
+                continue;
+            }
             ProfileAdventure profileAdventure = ProfileAdventure.builder()
                     .profile(profile)
                     .adventureType(adventure.adventureType())
                     .skillLevel(adventure.skillLevel())
                     .build();
             profile.getAdventures().add(profileAdventure);
+        }
+        if (!existingByType.isEmpty()) {
+            profile.getAdventures().removeAll(existingByType.values());
         }
     }
 

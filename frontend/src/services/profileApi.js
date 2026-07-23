@@ -1,54 +1,58 @@
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1'
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/v1";
 
 function buildHeaders(token, includeJson = false) {
-  const headers = {}
+  const headers = {};
 
   if (includeJson) {
-    headers['Content-Type'] = 'application/json'
+    headers["Content-Type"] = "application/json";
   }
 
   if (token) {
-    headers.Authorization = `Bearer ${token}`
+    headers.Authorization = `Bearer ${token}`;
   }
 
-  return headers
+  return headers;
 }
 
 async function handleResponse(response) {
   if (!response.ok) {
-    const errorText = await response.text()
-    throw new Error(errorText)
+    const errorText = await response.text();
+    // throw new Error(errorText)
+    const message = errorText
+      ? `${response.status} ${response.statusText}: ${errorText}`
+      : `${response.status} ${response.statusText}`;
+    throw new Error(message);
   }
 
-  return response.json()
+  return response.json();
 }
 
 export async function createProfile(userId, profileData, token) {
   const response = await fetch(`${API_BASE_URL}/users/${userId}/profile`, {
-    method: 'POST',
+    method: "POST",
     headers: buildHeaders(token, true),
     body: JSON.stringify(profileData),
-  })
+  });
 
-  return handleResponse(response)
+  return handleResponse(response);
 }
 
 export async function getProfile(userId, token) {
   const response = await fetch(`${API_BASE_URL}/users/${userId}/profile`, {
-    method: 'GET',
+    method: "GET",
     headers: buildHeaders(token),
-  })
+  });
 
-  return handleResponse(response)
+  return handleResponse(response);
 }
 
 export async function updateProfile(userId, profileData, token) {
   const response = await fetch(`${API_BASE_URL}/users/${userId}/profile`, {
-    method: 'PUT',
+    method: "PUT",
     headers: buildHeaders(token, true),
     body: JSON.stringify(profileData),
-  })
+  });
 
-  return handleResponse(response)
+  return handleResponse(response);
 }
