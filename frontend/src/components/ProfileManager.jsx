@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ProfileForm from "./ProfileForm";
 import {
   getProfile,
@@ -79,93 +80,165 @@ function ProfileManager() {
     );
   }
 
-return (
-  <div>
-    <h1>{hasProfile ? "My Profile" : "Create Profile"}</h1>
+  return (
+    <div>
+      <h1>{hasProfile ? "My Profile" : "Create Profile"}</h1>
 
-    {hasProfile && !isEditing ? (
-      <div className="profile-view">
-        <section className="location">
-          <p>📍 {profile.city}, {profile.state}, {profile.country}</p>
-        </section>
+      {hasProfile && !isEditing ? (
+        <div className="profile-view">
+          <section className="location">
+            <p>
+              📍 {profile.city}, {profile.state}, {profile.country}
+            </p>
+          </section>
 
-        <div className="info-grid">
-          <div className="info-item"><strong>Gender:</strong> {formatEnum(profile.gender)}</div>
-          <div className="info-item"><strong>Interested in:</strong> {formatEnum(profile.interestedIn)}</div>
-          <div className="info-item"><strong>Goals:</strong> {formatEnum(profile.relationshipGoal)}</div>
-          <div className="info-item"><strong>Birth Date:</strong> {profile.birthDate}</div>
-        </div>
-
-        <div className="profile-view-actions">
-          <button className="secondary-action-button" onClick={() => setIsGalleryOpen(true)}>
-            View Photo Gallery
-          </button>
-        </div>
-
-        {isGalleryOpen && (
-          <div className="modal-backdrop" role="dialog" aria-modal="true" onClick={() => setIsGalleryOpen(false)}>
-            <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3 id="photo-gallery-title">Photo Gallery</h3>
-                <button className="modal-close-button" onClick={() => setIsGalleryOpen(false)}>×</button>
-              </div>
-              {photos.length > 0 ? (
-                <div className="photo-gallery-grid">
-                  {photos.map((photo, index) => (
-                    <div className="photo-gallery-card" key={`${photo}-${index}`}>
-                      <img src={photo} alt={`Profile photo ${index + 1}`} />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="helper-text">No photos have been added yet.</p>
-              )}
+          <div className="info-grid">
+            <div className="info-item">
+              <strong>Gender:</strong> {formatEnum(profile.gender)}
+            </div>
+            <div className="info-item">
+              <strong>Interested in:</strong>{" "}
+              {formatEnum(profile.interestedIn)}
+            </div>
+            <div className="info-item">
+              <strong>Goals:</strong> {formatEnum(profile.relationshipGoal)}
+            </div>
+            <div className="info-item">
+              <strong>Birth Date:</strong> {profile.birthDate}
             </div>
           </div>
-        )}
 
-        {(profile.instagramUrl || profile.facebookUrl || profile.xUrl) && (
-          <section className="social-links-section">
-            <h3>Social Links</h3>
-            <div className="social-links">
-              {profile.instagramUrl && <a className="social-link-button" href={profile.instagramUrl} target="_blank" rel="noopener noreferrer">Instagram</a>}
-              {profile.facebookUrl && <a className="social-link-button" href={profile.facebookUrl} target="_blank" rel="noopener noreferrer">Facebook</a>}
-              {profile.xUrl && <a className="social-link-button" href={profile.xUrl} target="_blank" rel="noopener noreferrer">X</a>}
+          <div className="profile-view-actions">
+            <button
+              className="secondary-action-button"
+              onClick={() => setIsGalleryOpen(true)}
+            >
+              View Photo Gallery
+            </button>
+          </div>
+
+          {isGalleryOpen && (
+            <div
+              className="modal-backdrop"
+              role="dialog"
+              aria-modal="true"
+              onClick={() => setIsGalleryOpen(false)}
+            >
+              <div
+                className="modal-card"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="modal-header">
+                  <h3 id="photo-gallery-title">Photo Gallery</h3>
+                  <button
+                    className="modal-close-button"
+                    onClick={() => setIsGalleryOpen(false)}
+                  >
+                    ×
+                  </button>
+                </div>
+                {photos.length > 0 ? (
+                  <div className="photo-gallery-grid">
+                    {photos.map((photo, index) => (
+                      <div
+                        className="photo-gallery-card"
+                        key={`${photo}-${index}`}
+                      >
+                        <img
+                          src={photo}
+                          alt={`Profile photo ${index + 1}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="helper-text">No photos have been added yet.</p>
+                )}
+              </div>
             </div>
+          )}
+
+          {(profile.instagramUrl ||
+            profile.facebookUrl ||
+            profile.xUrl) && (
+            <section className="social-links-section">
+              <h3>Social Links</h3>
+              <div className="social-links">
+                {profile.instagramUrl && (
+                  <a
+                    className="social-link-button"
+                    href={profile.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Instagram
+                  </a>
+                )}
+                {profile.facebookUrl && (
+                  <a
+                    className="social-link-button"
+                    href={profile.facebookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Facebook
+                  </a>
+                )}
+                {profile.xUrl && (
+                  <a
+                    className="social-link-button"
+                    href={profile.xUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    X
+                  </a>
+                )}
+              </div>
+            </section>
+          )}
+
+          <section className="bio-section">
+            <h3>About Me</h3>
+            <p className="bio-text">{profile.bio}</p>
           </section>
-        )}
 
-        <section className="bio-section">
-          <h3>About Me</h3>
-          <p className="bio-text">{profile.bio}</p>
-        </section>
-
-        {profile.adventures?.length > 0 && (
+          {profile.adventures?.length > 0 && (
             <section className="adventures-section">
               <h3>Adventure Interests</h3>
               <div className="adventure-tags">
                 {profile.adventures.map(({ adventureType, skillLevel }) => (
-                    <div className="adventure-tag" key={adventureType}>
-                      <span className="adventure-tag-name">{formatEnum(adventureType)}</span>
-                      <span className="adventure-tag-skill">{formatEnum(skillLevel)}</span>
-                    </div>
+                  <div className="adventure-tag" key={adventureType}>
+                    <span className="adventure-tag-name">
+                      {formatEnum(adventureType)}
+                    </span>
+                    <span className="adventure-tag-skill">
+                      {formatEnum(skillLevel)}
+                    </span>
+                  </div>
                 ))}
               </div>
             </section>
-        )}
+          )}
 
-        <button onClick={() => setIsEditing(true)}>Edit Profile</button>
-      </div>
-    ) : (
-      <ProfileForm 
-        mode={hasProfile ? 'update' : 'create'}
-        initialValues={profile || undefined} 
-        onSubmit={handleSaveProfile}
-        isLoading={isLoading}
-      />
-    )}
-  </div>
-);
+          <Link className="matches-cta" to="/matches">
+            Find Matches
+          </Link>
+
+          <div className="profile-view-actions">
+            <button onClick={() => setIsEditing(true)}>Edit Profile</button>
+          </div>
+        </div>
+      ) : (
+        <ProfileForm
+          mode={hasProfile ? "update" : "create"}
+          initialValues={profile || undefined}
+          onSubmit={handleSaveProfile}
+          isLoading={isLoading}
+        />
+      )}
+    </div>
+  );
 }
 
 export default ProfileManager;
