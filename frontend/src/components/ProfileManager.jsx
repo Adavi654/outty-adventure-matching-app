@@ -6,6 +6,7 @@ import {
   createProfile,
   updateProfile,
 } from "../services/profileApi";
+import { getChatUsers, getMessages, sendMessage } from "../services/messageApi";
 import { formatEnum } from "../utils/formatters";
 
 function ProfileManager() {
@@ -17,6 +18,13 @@ function ProfileManager() {
   const [isLoading, setIsLoading] = useState(Boolean(userId));
   const [isEditing, setIsEditing] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatUsers, setChatUsers] = useState([]);
+  const [chatUserNames, setChatUserNames] = useState({});
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [draft, setDraft] = useState("");
+  const [chatError, setChatError] = useState("");
 
   useEffect(() => {
     if (!userId) {
@@ -40,6 +48,64 @@ function ProfileManager() {
 
     loadProfile();
   }, [userId, token]);
+
+  useEffect(() => {
+    if (!isChatOpen || !userId) {
+      return;
+    }
+
+    const loadChatUsers = async () => {
+      try {
+        const users = await getChatUsers(userId, token);
+        setChatUsers(users);
+        if (!selectedUserId && users.length > 0) {
+          setSelectedUserId(users[0]);
+        }
+
+        const resolvedNames = await Promise.all(
+          users.map(async (contactId) => {
+            try {
+              const profileData = await getProfile(contactId, token);
+              const displayName = [profileData.firstName, profileData.lastName]
+                .filter(Boolean)
+                .join(" ");
+              return [contactId, displayName || `User ${contactId}`];
+            } catch {
+              return [contactId, `User ${contactId}`];
+            }
+          }),
+        );
+
+        setChatUserNames(Object.fromEntries(resolvedNames));
+      } catch (err) {
+        setChatError("Unable to load chat partners.");
+      }
+    };
+
+    loadChatUsers();
+    const intervalId = window.setInterval(loadChatUsers, 5000);
+    return () => window.clearInterval(intervalId);
+  }, [isChatOpen, userId, token, selectedUserId]);
+
+  useEffect(() => {
+    if (!isChatOpen || !userId || !selectedUserId) {
+      return;
+    }
+
+    const loadMessages = async () => {
+      try {
+        const history = await getMessages(userId, selectedUserId, token);
+        setMessages(history);
+        setChatError("");
+      } catch {
+        setChatError("Unable to load conversation history.");
+      }
+    };
+
+    loadMessages();
+    const intervalId = window.setInterval(loadMessages, 5000);
+    return () => window.clearInterval(intervalId);
+  }, [isChatOpen, userId, token, selectedUserId]);
 
   const handleSaveProfile = async (formData) => {
     setIsLoading(true);
@@ -71,6 +137,29 @@ function ProfileManager() {
 
   const photos = profile?.photos || [];
 
+  const handleSendMessage = async (event) => {
+    event.preventDefault();
+    if (!draft.trim() || !userId || !selectedUserId) {
+      return;
+    }
+
+    try {
+      await sendMessage(
+        {
+          senderId: Number(userId),
+          receiverId: Number(selectedUserId),
+          content: draft.trim(),
+        },
+        token,
+      );
+      setDraft("");
+      const history = await getMessages(userId, selectedUserId, token);
+      setMessages(history);
+    } catch {
+      setChatError("Unable to send message right now.");
+    }
+  };
+
   if (!userId) {
     return (
       <div>
@@ -86,6 +175,15 @@ function ProfileManager() {
 
       {hasProfile && !isEditing ? (
         <div className="profile-view">
+          <div className="profile-view-actions profile-view-actions--top">
+            <button
+              className="secondary-action-button"
+              onClick={() => setIsChatOpen(true)}
+            >
+              Chat
+            </button>
+          </div>
+
           <section className="location">
             <p>
               📍 {profile.city}, {profile.state}, {profile.country}
@@ -97,8 +195,7 @@ function ProfileManager() {
               <strong>Gender:</strong> {formatEnum(profile.gender)}
             </div>
             <div className="info-item">
-              <strong>Interested in:</strong>{" "}
-              {formatEnum(profile.interestedIn)}
+              <strong>Interested in:</strong> {formatEnum(profile.interestedIn)}
             </div>
             <div className="info-item">
               <strong>Goals:</strong> {formatEnum(profile.relationshipGoal)}
@@ -124,10 +221,7 @@ function ProfileManager() {
               aria-modal="true"
               onClick={() => setIsGalleryOpen(false)}
             >
-              <div
-                className="modal-card"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <div className="modal-card" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
                   <h3 id="photo-gallery-title">Photo Gallery</h3>
                   <button
@@ -144,10 +238,7 @@ function ProfileManager() {
                         className="photo-gallery-card"
                         key={`${photo}-${index}`}
                       >
-                        <img
-                          src={photo}
-                          alt={`Profile photo ${index + 1}`}
-                        />
+                        <img src={photo} alt={`Profile photo ${index + 1}`} />
                       </div>
                     ))}
                   </div>
@@ -158,9 +249,7 @@ function ProfileManager() {
             </div>
           )}
 
-          {(profile.instagramUrl ||
-            profile.facebookUrl ||
-            profile.xUrl) && (
+          {(profile.instagramUrl || profile.facebookUrl || profile.xUrl) && (
             <section className="social-links-section">
               <h3>Social Links</h3>
               <div className="social-links">
@@ -224,6 +313,80 @@ function ProfileManager() {
           <Link className="matches-cta" to="/matches">
             Find Matches
           </Link>
+
+          {isChatOpen && (
+            <div
+              className="modal-backdrop"
+              role="dialog"
+              aria-modal="true"
+              onClick={() => setIsChatOpen(false)}
+            >
+              <div
+                className="modal-card chat-modal"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="modal-header">
+                  <h3>Messages</h3>
+                  <button
+                    className="modal-close-button"
+                    onClick={() => setIsChatOpen(false)}
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div className="chat-layout">
+                  <div className="chat-user-list">
+                    {chatUsers.length === 0 ? (
+                      <p className="helper-text">No chat partners yet.</p>
+                    ) : (
+                      chatUsers.map((userIdValue) => (
+                        <button
+                          key={userIdValue}
+                          className={`chat-user-button ${selectedUserId === userIdValue ? "chat-user-button--active" : ""}`}
+                          onClick={() => setSelectedUserId(userIdValue)}
+                        >
+                          {chatUserNames[userIdValue] || `User ${userIdValue}`}
+                        </button>
+                      ))
+                    )}
+                  </div>
+
+                  <div className="chat-panel">
+                    {chatError && <p className="error-text">{chatError}</p>}
+                    <div className="chat-history">
+                      {messages.length === 0 ? (
+                        <p className="helper-text">Start the conversation.</p>
+                      ) : (
+                        messages.map((message) => (
+                          <div
+                            key={message.id}
+                            className={`chat-bubble ${message.senderId === Number(userId) ? "chat-bubble--self" : ""}`}
+                          >
+                            <div>{message.content}</div>
+                            <small>
+                              {message.createdAt
+                                ? new Date(message.createdAt).toLocaleString()
+                                : ""}
+                            </small>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    <form className="chat-compose" onSubmit={handleSendMessage}>
+                      <input
+                        value={draft}
+                        onChange={(event) => setDraft(event.target.value)}
+                        placeholder="Type a message"
+                      />
+                      <button type="submit">Send</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="profile-view-actions">
             <button onClick={() => setIsEditing(true)}>Edit Profile</button>
