@@ -337,7 +337,7 @@ function PotentialMatches() {
 
         {match.demoData && (
           <p className="match-demo-notice">
-            Demo profile — fictional data for the Sprint 2 demonstration.
+            Demo profile — fictional data for the Sprint 3 demonstration.
           </p>
         )}
       </article>
