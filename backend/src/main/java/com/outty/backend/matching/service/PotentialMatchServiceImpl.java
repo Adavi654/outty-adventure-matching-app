@@ -7,6 +7,8 @@ import com.outty.backend.matching.provider.PotentialMatchProvider;
 import com.outty.backend.profile.dto.response.AdventurePreferenceResponse;
 import com.outty.backend.profile.entity.Profile;
 import com.outty.backend.profile.entity.enums.AdventureType;
+import com.outty.backend.profile.entity.enums.Gender;
+import com.outty.backend.profile.entity.enums.InterestedIn;
 import com.outty.backend.profile.entity.enums.RelationshipGoal;
 import com.outty.backend.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -51,6 +54,10 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                         requester.getRelationshipGoal(),
                         candidate.relationshipGoal()
                 ))
+                .filter(candidate -> matchesRequesterGenderPreference(
+                        requester.getInterestedIn(),
+                        candidate.gender()
+                ))
                 .filter(candidate -> sharesAdventureInterest(requester, candidate))
                 .sorted(
                         Comparator
@@ -72,6 +79,10 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                 .filter(candidate -> hasMatchingCountry(requester, candidate)
                         || sameValue(requester.getCity(), candidate.city())
                         || sameValue(requester.getState(), candidate.state()))
+                .filter(candidate -> matchesRequesterGenderPreference(
+                        requester.getInterestedIn(),
+                        candidate.gender()
+                ))
                 .sorted(
                         Comparator
                                 .comparingInt(
@@ -123,6 +134,45 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
         return requesterGoal == candidateGoal
                 || requesterGoal == RelationshipGoal.BOTH
                 || candidateGoal == RelationshipGoal.BOTH;
+    }
+
+    private boolean matchesRequesterGenderPreference(
+            InterestedIn requesterPreference,
+            String candidateGender
+    ) {
+        if (requesterPreference == null) {
+            return true;
+        }
+
+        Gender gender = parseCandidateGender(candidateGender);
+        if (gender == null) {
+            return false;
+        }
+
+        return switch (requesterPreference) {
+            case WOMEN -> gender == Gender.FEMALE;
+            case MEN -> gender == Gender.MALE;
+            case BOTH -> gender == Gender.MALE || gender == Gender.FEMALE;
+        };
+    }
+
+    private Gender parseCandidateGender(String candidateGender) {
+        if (candidateGender == null || candidateGender.isBlank()) {
+            return null;
+        }
+
+        String normalized = candidateGender.trim()
+                .toUpperCase(Locale.ROOT)
+                .replace("-", "")
+                .replace(" ", "");
+
+        return switch (normalized) {
+            case "MALE" -> Gender.MALE;
+            case "FEMALE" -> Gender.FEMALE;
+            case "NONBINARY" -> Gender.NONBINARY;
+            case "PREFERNOT", "PREFERSNOTTOSAY" -> Gender.PREFERNOT;
+            default -> null;
+        };
     }
 
     private boolean sharesAdventureInterest(
