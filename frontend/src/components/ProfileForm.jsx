@@ -7,6 +7,7 @@ const EMPTY_FORM_VALUES = {
   city: '',
   state: '',
   country: '',
+  matchDistanceMiles: '',
   gender: '',
   birthDate: '',
   bio: '',
@@ -162,6 +163,20 @@ function ProfileForm({
           type="text"
           value={formData.country}
           onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="matchDistanceMiles">Match distance (miles)</label>
+        <input
+          id="matchDistanceMiles"
+          name="matchDistanceMiles"
+          type="number"
+          min="0"
+          step="1"
+          value={formData.matchDistanceMiles ?? ''}
+          onChange={handleChange}
+          placeholder="e.g. 25"
         />
       </div>
 

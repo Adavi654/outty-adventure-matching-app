@@ -39,6 +39,9 @@ public class Profile {
     @Column(nullable = false, length = 100)
     private String country;
 
+    @Column(name = "match_distance_miles")
+    private Integer matchDistanceMiles;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false, length = 50)
     private Gender gender;

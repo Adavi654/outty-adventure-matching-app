@@ -206,6 +206,34 @@ class PotentialMatchServiceImplTest {
     }
 
     @Test
+    void shouldAllowMatchesWhenRequesterCountryIsBlank() {
+        requester.setCountry(null);
+
+        PotentialMatchResponse candidate = candidate(
+                2L,
+                "Jordan",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                20
+        );
+
+        when(profileRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(requester));
+        when(potentialMatchProvider.getCandidates())
+                .thenReturn(List.of(candidate));
+
+        List<PotentialMatchResponse> matches =
+                potentialMatchService.getPotentialMatches(USER_ID);
+
+        assertEquals(List.of(2L), matches.stream()
+                .map(PotentialMatchResponse::userId)
+                .toList());
+    }
+
+    @Test
     void shouldRequireSharedAdventureInterest() {
         PotentialMatchResponse noSharedAdventureCandidate = candidate(
                 2L,
@@ -303,6 +331,77 @@ class PotentialMatchServiceImplTest {
     }
 
     @Test
+    void shouldFilterCandidatesOutsideRequestedDistance() {
+        requester.setMatchDistanceMiles(50);
+
+        PotentialMatchResponse nearbyCandidate = candidate(
+                2L,
+                "Jordan",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                20
+        );
+        PotentialMatchResponse farCandidate = candidate(
+                3L,
+                "Morgan",
+                "Denver",
+                "Colorado",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                120
+        );
+
+        when(profileRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(requester));
+        when(potentialMatchProvider.getCandidates())
+                .thenReturn(List.of(nearbyCandidate, farCandidate));
+
+        List<PotentialMatchResponse> matches =
+                potentialMatchService.getPotentialMatches(USER_ID);
+
+        assertEquals(List.of(2L), matches.stream()
+                .map(PotentialMatchResponse::userId)
+                .toList());
+    }
+
+    @Test
+    void shouldReturnFallbackMatchesWhenStrictFiltersExcludeAllCandidates() {
+        requester.setMatchDistanceMiles(100);
+
+        PotentialMatchResponse sameCityCandidate = candidate(
+                2L,
+                "Jordan",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.RELATIONSHIPS,
+                List.of(
+                        new AdventurePreferenceResponse(
+                                AdventureType.KAYAKING,
+                                SkillLevel.ADVANCED
+                        )
+                ),
+                20
+        );
+
+        when(profileRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(requester));
+        when(potentialMatchProvider.getCandidates())
+                .thenReturn(List.of(sameCityCandidate));
+
+        List<PotentialMatchResponse> matches =
+                potentialMatchService.getPotentialMatches(USER_ID);
+
+        assertEquals(List.of(2L), matches.stream()
+                .map(PotentialMatchResponse::userId)
+                .toList());
+    }
+
+    @Test
     void shouldReturnEmptyListWhenNoCandidatesQualify() {
         when(profileRepository.findByUserId(USER_ID))
                 .thenReturn(Optional.of(requester));
@@ -356,6 +455,19 @@ class PotentialMatchServiceImplTest {
             RelationshipGoal relationshipGoal,
             List<AdventurePreferenceResponse> adventures
     ) {
+        return candidate(userId, firstName, city, state, country, relationshipGoal, adventures, null);
+    }
+
+    private PotentialMatchResponse candidate(
+            Long userId,
+            String firstName,
+            String city,
+            String state,
+            String country,
+            RelationshipGoal relationshipGoal,
+            List<AdventurePreferenceResponse> adventures,
+            Integer distanceMiles
+    ) {
         return new PotentialMatchResponse(
                 userId,
                 firstName,
@@ -369,6 +481,7 @@ class PotentialMatchServiceImplTest {
                 InterestedIn.BOTH,
                 relationshipGoal,
                 adventures,
+                distanceMiles,
                 true
         );
     }

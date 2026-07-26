@@ -15,6 +15,7 @@ public record ProfileResponse(
         String city,
         String state,
         String country,
+        Integer matchDistanceMiles,
         Gender gender,
         LocalDate birthDate,
         String bio,
@@ -26,4 +27,25 @@ public record ProfileResponse(
         String xUrl,
         List<AdventurePreferenceResponse> adventures
 ) {
+    public ProfileResponse(
+            Long id,
+            Long userId,
+            String firstName,
+            String lastName,
+            String city,
+            String state,
+            String country,
+            Gender gender,
+            LocalDate birthDate,
+            String bio,
+            InterestedIn interestedIn,
+            RelationshipGoal relationshipGoal,
+            List<String> photos,
+            String instagramUrl,
+            String facebookUrl,
+            String xUrl,
+            List<AdventurePreferenceResponse> adventures
+    ) {
+        this(id, userId, firstName, lastName, city, state, country, null, gender, birthDate, bio, interestedIn, relationshipGoal, photos, instagramUrl, facebookUrl, xUrl, adventures);
+    }
 }

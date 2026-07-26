@@ -114,6 +114,7 @@ function ProfileManager() {
     const payload = {
       ...formData,
       userId: parseInt(userId, 10),
+      matchDistanceMiles: formData.matchDistanceMiles === '' ? null : Number(formData.matchDistanceMiles),
       photos: formData.photos || [],
     };
 

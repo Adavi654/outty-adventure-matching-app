@@ -20,6 +20,7 @@ public record PotentialMatchResponse(
         InterestedIn interestedIn,
         RelationshipGoal relationshipGoal,
         List<AdventurePreferenceResponse> adventures,
+        Integer distanceMiles,
         boolean demoData
 ) {
 }
