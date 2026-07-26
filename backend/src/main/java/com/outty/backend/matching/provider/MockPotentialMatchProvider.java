@@ -19,7 +19,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     9001L,
                     "Avery",
                     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-                    "Atlanta",
+                    "Marietta",
                     "Georgia",
                     "United States",
                     "Non-binary",
@@ -31,14 +31,14 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.INTERMEDIATE),
                             new AdventurePreferenceResponse(AdventureType.CAMPING, SkillLevel.BEGINNER)
                     ),
-                    15,
+                    20,
                     true
             ),
             new PotentialMatchResponse(
                     9002L,
                     "Jordan",
                     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
-                    "Savannah",
+                    "Kennesaw",
                     "Georgia",
                     "United States",
                     "Male",
@@ -50,7 +50,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.KAYAKING, SkillLevel.ADVANCED),
                             new AdventurePreferenceResponse(AdventureType.CAMPING, SkillLevel.INTERMEDIATE)
                     ),
-                    80,
+                    27,
                     true
             ),
             new PotentialMatchResponse(
@@ -95,7 +95,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     9005L,
                     "Riley",
                     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
-                    "Atlanta",
+                    "Athens",
                     "Georgia",
                     "United States",
                     "Female",
@@ -107,14 +107,14 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.INTERMEDIATE),
                             new AdventurePreferenceResponse(AdventureType.TRAVELING, SkillLevel.BEGINNER)
                     ),
-                    35,
+                    72,
                     true
             ),
             new PotentialMatchResponse(
                     9006L,
                     "Casey",
                     "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=800&q=80",
-                    "Atlanta",
+                    "Marietta",
                     "Georgia",
                     "United States",
                     "Female",
@@ -126,7 +126,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.CLIMBING, SkillLevel.INTERMEDIATE),
                             new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.BEGINNER)
                     ),
-                    12,
+                    18,
                     true
             ),
             new PotentialMatchResponse(
@@ -152,7 +152,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     9008L,
                     "Parker",
                     "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?auto=format&fit=crop&w=800&q=80",
-                    "Atlanta",
+                    "Macon",
                     "Georgia",
                     "United States",
                     "Female",
@@ -164,7 +164,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.CAMPING, SkillLevel.INTERMEDIATE),
                             new AdventurePreferenceResponse(AdventureType.KAYAKING, SkillLevel.BEGINNER)
                     ),
-                    28,
+                    85,
                     true
             ),
             new PotentialMatchResponse(
