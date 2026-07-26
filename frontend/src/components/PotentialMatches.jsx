@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getPotentialMatches } from '../services/matchApi'
+import { getPotentialMatches, sendSwipeDecision } from '../services/matchApi'
 import { formatEnum } from '../utils/formatters'
 import '../styles/PotentialMatches.css'
 
@@ -48,6 +48,7 @@ function PotentialMatches() {
   const [dragOffset, setDragOffset] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [imageFailed, setImageFailed] = useState(false)
+  const [matchedUser, setMatchedUser] = useState(null)
   const dragStartRef = useRef(0)
   const decisionTimerRef = useRef(null)
 
@@ -90,14 +91,34 @@ function PotentialMatches() {
     }
   }, [])
 
-  const advanceCard = (nextDecision) => {
+  const advanceCard = async (nextDecision) => {
     if (decision) {
       return
     }
 
+    const currentMatch = matches[currentIndex]
+
     setIsDragging(false)
     setDragOffset(0)
     setDecision(nextDecision)
+
+    if (currentMatch) {
+      try {
+        const targetId = currentMatch.id || currentMatch.userId
+        const response = await sendSwipeDecision(
+          userId,
+          targetId,
+          nextDecision,
+          token
+        )
+
+        if (response.isMatch) {
+          setMatchedUser(currentMatch)
+        }
+      } catch (err) {
+        console.error('Failed to log swipe decision:', err)
+      }
+    }
 
     decisionTimerRef.current = window.setTimeout(() => {
       setCurrentIndex((index) => index + 1)
@@ -364,6 +385,28 @@ function PotentialMatches() {
       <Link className="matches-link" to="/profile">
         Back to profile
       </Link>
+
+      {/* Match Notification Modal */}
+      {matchedUser && (
+        <div className="match-modal-overlay">
+          <div className="match-modal-content">
+            <h2>It's a Match! 🎉</h2>
+            <p>You and {matchedUser.firstName} both expressed interest in each other!</p>
+            <div className="match-modal-actions">
+              <button
+                type="button"
+                className="match-retry-button"
+                onClick={() => setMatchedUser(null)}
+              >
+                Keep Swiping
+              </button>
+              <Link className="matches-link" to="/messages">
+                Send Message
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
