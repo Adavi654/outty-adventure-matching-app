@@ -1,18 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&display=swap');
 
 :root {
-  --text: #3d4a45;
-  --text-h: #1a2e28;
-  --text-muted: #5f6f68;
-  --bg: #eef3f0;
-  --bg-accent: #e2ebe6;
-  --card-bg: #ffffff;
-  --border: #c5d2cb;
-  --border-focus: #2f6f5e;
-  --accent: #2f6f5e;
-  --accent-hover: #245749;
-  --field-bg: #f7faf8;
-  --shadow: 0 12px 32px rgba(26, 46, 40, 0.08);
+  /* Semantic design tokens */
+  --color-primary: #2f6f5e;
+  --color-primary-hover: #245749;
+  --color-surface: #ffffff;
+  --color-background: #eef3f0;
+  --color-background-accent: #e2ebe6;
+  --color-text: #1a2e28;
+  --color-text-body: #3d4a45;
+  --color-text-muted: #5f6f68;
+  --color-border: #c5d2cb;
+  --color-border-focus: #2f6f5e;
+  --color-error: #b42318;
+  --color-accent-warm: #c4a35a;
+  --color-field-bg: #f7faf8;
+  --radius-card: 12px;
+  --radius-input: 8px;
+  --radius-pill: 999px;
+  --shadow-card: 0 12px 32px rgba(26, 46, 40, 0.08);
+
+  /* Legacy aliases (consumed by App.css and page styles) */
+  --text: var(--color-text-body);
+  --text-h: var(--color-text);
+  --text-muted: var(--color-text-muted);
+  --bg: var(--color-background);
+  --bg-accent: var(--color-background-accent);
+  --card-bg: var(--color-surface);
+  --border: var(--color-border);
+  --border-focus: var(--color-border-focus);
+  --accent: var(--color-primary);
+  --accent-hover: var(--color-primary-hover);
+  --field-bg: var(--color-field-bg);
+  --shadow: var(--shadow-card);
 
   --sans: 'Source Sans 3', 'Segoe UI', sans-serif;
   --heading: 'Outfit', 'Segoe UI', sans-serif;
@@ -47,9 +67,9 @@ body {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0 16px 24px;
   text-align: left;
 }
 
@@ -82,7 +102,6 @@ p {
   }
 
   #root {
-    padding: 16px 12px;
-    justify-content: flex-start;
+    padding: 0 12px 20px;
   }
 }
