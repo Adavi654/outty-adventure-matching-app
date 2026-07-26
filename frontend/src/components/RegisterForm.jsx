@@ -2,6 +2,7 @@ import { useState } from "react";
 import { registerUser } from "../services/authApi";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.css";
+
 function RegisterForm() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -53,12 +54,20 @@ function RegisterForm() {
     }
   };
 
+  const isSuccessMessage = statusMessage.startsWith("Registration successful");
+
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <h2>Create Account</h2>
-        <form className="register-form" onSubmit={handleSubmit}>
-          <div className="form-field">
+    <div className="auth-page">
+      <div className="auth-card">
+        <header className="auth-card__header">
+          <h2 className="auth-card__title">Create Account</h2>
+          <p className="auth-card__subtitle">
+            Join Outty and connect with outdoor adventurers
+          </p>
+        </header>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="auth-field">
             <label htmlFor="firstName">First Name</label>
             <input
               id="firstName"
@@ -67,10 +76,12 @@ function RegisterForm() {
               value={formData.firstName}
               onChange={handleChange}
               required
+              disabled={isSubmitting}
+              autoComplete="given-name"
             />
           </div>
 
-          <div className="form-field">
+          <div className="auth-field">
             <label htmlFor="lastName">Last Name</label>
             <input
               id="lastName"
@@ -79,10 +90,12 @@ function RegisterForm() {
               value={formData.lastName}
               onChange={handleChange}
               required
+              disabled={isSubmitting}
+              autoComplete="family-name"
             />
           </div>
 
-          <div className="form-field">
+          <div className="auth-field">
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -91,10 +104,12 @@ function RegisterForm() {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={isSubmitting}
+              autoComplete="email"
             />
           </div>
 
-          <div className="form-field">
+          <div className="auth-field">
             <label htmlFor="password">Password</label>
             <input
               id="password"
@@ -103,20 +118,29 @@ function RegisterForm() {
               value={formData.password}
               onChange={handleChange}
               required
+              disabled={isSubmitting}
+              autoComplete="new-password"
             />
           </div>
 
-          <button
-            className="register-button"
-            type="submit"
-            disabled={isSubmitting}
-          >
+          <button className="auth-button" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Creating account..." : "Register"}
           </button>
 
-          {statusMessage && <p className="status-message">{statusMessage}</p>}
+          {statusMessage && (
+            <p
+              className={`auth-message ${
+                isSuccessMessage
+                  ? "auth-message--success"
+                  : "auth-message--error"
+              }`}
+              role={isSuccessMessage ? "status" : "alert"}
+            >
+              {statusMessage}
+            </p>
+          )}
 
-          <p className="login-link">
+          <p className="auth-footer">
             Already have an account? <Link to="/login">Login</Link>
           </p>
         </form>
