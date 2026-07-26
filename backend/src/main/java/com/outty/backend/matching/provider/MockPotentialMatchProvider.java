@@ -31,6 +31,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.INTERMEDIATE),
                             new AdventurePreferenceResponse(AdventureType.CAMPING, SkillLevel.BEGINNER)
                     ),
+                    15,
                     true
             ),
             new PotentialMatchResponse(
@@ -49,6 +50,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.KAYAKING, SkillLevel.ADVANCED),
                             new AdventurePreferenceResponse(AdventureType.CAMPING, SkillLevel.INTERMEDIATE)
                     ),
+                    80,
                     true
             ),
             new PotentialMatchResponse(
@@ -67,6 +69,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.EXPERT),
                             new AdventurePreferenceResponse(AdventureType.BACKPACKING, SkillLevel.ADVANCED)
                     ),
+                    180,
                     true
             ),
             new PotentialMatchResponse(
@@ -85,6 +88,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.CLIMBING, SkillLevel.INTERMEDIATE),
                             new AdventurePreferenceResponse(AdventureType.TRAVELING, SkillLevel.ADVANCED)
                     ),
+                    220,
                     true
             ),
             new PotentialMatchResponse(
@@ -103,6 +107,84 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                             new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.INTERMEDIATE),
                             new AdventurePreferenceResponse(AdventureType.TRAVELING, SkillLevel.BEGINNER)
                     ),
+                    35,
+                    true
+            ),
+            new PotentialMatchResponse(
+                    9006L,
+                    "Casey",
+                    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=800&q=80",
+                    "Atlanta",
+                    "Georgia",
+                    "United States",
+                    "Female",
+                    LocalDate.of(1990, 6, 18),
+                    "Coffee-fueled climber who loves weekend trail adventures.",
+                    InterestedIn.BOTH,
+                    RelationshipGoal.BOTH,
+                    List.of(
+                            new AdventurePreferenceResponse(AdventureType.CLIMBING, SkillLevel.INTERMEDIATE),
+                            new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.BEGINNER)
+                    ),
+                    12,
+                    true
+            ),
+            new PotentialMatchResponse(
+                    9007L,
+                    "Sam",
+                    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
+                    "Atlanta",
+                    "Georgia",
+                    "United States",
+                    "Female",
+                    LocalDate.of(1987, 1, 9),
+                    "Outdoor photographer looking for a hiking buddy and new memories.",
+                    InterestedIn.BOTH,
+                    RelationshipGoal.BOTH,
+                    List.of(
+                            new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.ADVANCED),
+                            new AdventurePreferenceResponse(AdventureType.CLIMBING, SkillLevel.INTERMEDIATE)
+                    ),
+                    22,
+                    true
+            ),
+            new PotentialMatchResponse(
+                    9008L,
+                    "Parker",
+                    "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?auto=format&fit=crop&w=800&q=80",
+                    "Atlanta",
+                    "Georgia",
+                    "United States",
+                    "Female",
+                    LocalDate.of(1993, 9, 2),
+                    "Camping and kayaking enthusiast who enjoys spontaneous road trips.",
+                    InterestedIn.BOTH,
+                    RelationshipGoal.BOTH,
+                    List.of(
+                            new AdventurePreferenceResponse(AdventureType.CAMPING, SkillLevel.INTERMEDIATE),
+                            new AdventurePreferenceResponse(AdventureType.KAYAKING, SkillLevel.BEGINNER)
+                    ),
+                    28,
+                    true
+            ),
+            new PotentialMatchResponse(
+                    9009L,
+                    "Drew",
+                    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
+                    "Atlanta",
+                    "Georgia",
+                    "United States",
+                    "Female",
+                    LocalDate.of(1992, 3, 14),
+                    "Weekend explorer who loves hiking, camping, and climbing with friends.",
+                    InterestedIn.BOTH,
+                    RelationshipGoal.BOTH,
+                    List.of(
+                            new AdventurePreferenceResponse(AdventureType.HIKING, SkillLevel.ADVANCED),
+                            new AdventurePreferenceResponse(AdventureType.CAMPING, SkillLevel.INTERMEDIATE),
+                            new AdventurePreferenceResponse(AdventureType.CLIMBING, SkillLevel.INTERMEDIATE)
+                    ),
+                    18,
                     true
             )
     );

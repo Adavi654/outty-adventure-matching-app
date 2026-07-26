@@ -43,9 +43,10 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
             );
         }
 
-        return candidates.stream()
+        List<PotentialMatchResponse> strictMatches = candidates.stream()
                 .filter(candidate -> !Objects.equals(candidate.userId(), userId))
-                .filter(candidate -> sameValue(requester.getCountry(), candidate.country()))
+                .filter(candidate -> isWithinRequestedDistance(requester, candidate))
+                .filter(candidate -> hasMatchingCountry(requester, candidate))
                 .filter(candidate -> relationshipGoalsAreCompatible(
                         requester.getRelationshipGoal(),
                         candidate.relationshipGoal()
@@ -60,6 +61,55 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                                 .thenComparing(PotentialMatchResponse::userId)
                 )
                 .toList();
+
+        if (!strictMatches.isEmpty()) {
+            return strictMatches;
+        }
+
+        return candidates.stream()
+                .filter(candidate -> !Objects.equals(candidate.userId(), userId))
+                .filter(candidate -> isWithinRequestedDistance(requester, candidate))
+                .filter(candidate -> hasMatchingCountry(requester, candidate)
+                        || sameValue(requester.getCity(), candidate.city())
+                        || sameValue(requester.getState(), candidate.state()))
+                .sorted(
+                        Comparator
+                                .comparingInt(
+                                        (PotentialMatchResponse candidate) ->
+                                                geographicRank(requester, candidate)
+                                )
+                                .thenComparing(PotentialMatchResponse::userId)
+                )
+                .limit(5)
+                .toList();
+    }
+
+    private boolean isWithinRequestedDistance(Profile requester, PotentialMatchResponse candidate) {
+        Integer requestedDistance = requester.getMatchDistanceMiles();
+        if (requestedDistance == null || requestedDistance <= 0) {
+            return true;
+        }
+
+        if (candidate.distanceMiles() == null) {
+            return false;
+        }
+
+        return candidate.distanceMiles() <= requestedDistance;
+    }
+
+    private boolean hasMatchingCountry(Profile requester, PotentialMatchResponse candidate) {
+        String requesterCountry = requester.getCountry();
+        String candidateCountry = candidate.country();
+
+        if (requesterCountry == null || requesterCountry.isBlank()) {
+            return true;
+        }
+
+        if (candidateCountry == null || candidateCountry.isBlank()) {
+            return true;
+        }
+
+        return sameValue(requesterCountry, candidateCountry);
     }
 
     private boolean relationshipGoalsAreCompatible(
@@ -67,7 +117,7 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
             RelationshipGoal candidateGoal
     ) {
         if (requesterGoal == null || candidateGoal == null) {
-            return false;
+            return true;
         }
 
         return requesterGoal == candidateGoal

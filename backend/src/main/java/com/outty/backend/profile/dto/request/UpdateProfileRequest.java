@@ -20,6 +20,8 @@ public record UpdateProfileRequest(
         @Size(max = 100, message = "Country must be at most 100 characters")
         String country,
 
+        Integer matchDistanceMiles,
+
         Gender gender,
 
         LocalDate birthDate,
@@ -62,5 +64,22 @@ public record UpdateProfileRequest(
         )
         String xUrl,
         List<AdventurePreferenceRequest> adventures
-) {    
+) {
+    public UpdateProfileRequest(
+            String city,
+            String state,
+            String country,
+            Gender gender,
+            LocalDate birthDate,
+            String bio,
+            InterestedIn interestedIn,
+            RelationshipGoal relationshipGoal,
+            List<String> photos,
+            String instagramUrl,
+            String facebookUrl,
+            String xUrl,
+            List<AdventurePreferenceRequest> adventures
+    ) {
+        this(city, state, country, null, gender, birthDate, bio, interestedIn, relationshipGoal, photos, instagramUrl, facebookUrl, xUrl, adventures);
+    }
 }

@@ -25,6 +25,7 @@ public class ProfileMapper {
                 .city(request.city())
                 .state(request.state())
                 .country(request.country())
+                .matchDistanceMiles(request.matchDistanceMiles())
                 .birthDate(request.birthDate())
                 .bio(request.bio())
                 .gender(request.gender())
@@ -50,6 +51,7 @@ public class ProfileMapper {
             profile.getCity(),
             profile.getState(),
             profile.getCountry(),
+            profile.getMatchDistanceMiles(),
             profile.getGender(),
             profile.getBirthDate(),
             profile.getBio(),
@@ -67,6 +69,7 @@ public class ProfileMapper {
         profile.setCity(request.city());
         profile.setState(request.state());
         profile.setCountry(request.country());
+        profile.setMatchDistanceMiles(request.matchDistanceMiles());
         profile.setGender(request.gender());
         profile.setBirthDate(request.birthDate());
         profile.setBio(request.bio());
