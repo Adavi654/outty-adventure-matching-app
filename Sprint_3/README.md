@@ -6,7 +6,13 @@ _________________________
 
 # 1. Forecast
 
+During the course of Sprint 2, because everyone in our team was fully present and available throughout the sprint, we were collectively operating at 100% capacity. We managed to complete 34 story points in this period.
 
+Normally, calculating targeted points using the Yesterday's Weather forecasting pattern is done by taking a rolling average of previous sprints, which would include Sprint 1's 21 story points. However, as noted in Sprint 2's documentation, we consistently had additional development capacity remaining during Sprint 1. With both this and our performance during Sprint 2 in mind, we opted to use our established velocity of 34 points from Sprint 2 as our baseline when calculating using Yesterday's Weather.
+
+Our team is projected to once again be operating at 100% capacity throughout the course of Sprint 3. Therefore, no adjustments are required for team availability. This means that our targeted points should be the product of 34 points and 100% capacity, resulting in a workload of 34 target points once again.
+
+This will be our final sprint for this project, and therefore our final, normalized velocity for this team.
 
 _________________________
 
