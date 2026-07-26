@@ -163,21 +163,24 @@ function ProfileManager() {
 
   if (!userId) {
     return (
-      <div>
+      <div className="profile-page">
         <h1>My Profile</h1>
-        <p>Unable to identify the logged-in user. Please log in again.</p>
+        <p className="profile-empty-state">
+          Unable to identify the logged-in user. Please log in again.
+        </p>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="profile-page">
       <h1>{hasProfile ? "My Profile" : "Create Profile"}</h1>
 
       {hasProfile && !isEditing ? (
         <div className="profile-view">
           <div className="profile-view-actions profile-view-actions--top">
             <button
+              type="button"
               className="secondary-action-button"
               onClick={() => setIsChatOpen(true)}
             >
@@ -185,74 +188,77 @@ function ProfileManager() {
             </button>
           </div>
 
-          <section className="location">
-            <p>
-              📍 {profile.city}, {profile.state}, {profile.country}
+          <section className="profile-card profile-header">
+            <p className="profile-location">
+              <span className="profile-location-icon" aria-hidden="true">
+                📍
+              </span>
+              {profile.city}, {profile.state}, {profile.country}
+            </p>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="info-label">Gender</span>
+                <span className="info-value">{formatEnum(profile.gender)}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Interested in</span>
+                <span className="info-value">
+                  {formatEnum(profile.interestedIn)}
+                </span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Goals</span>
+                <span className="info-value">
+                  {formatEnum(profile.relationshipGoal)}
+                </span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Birth date</span>
+                <span className="info-value">{profile.birthDate}</span>
+              </div>
+              {profile.matchDistanceMiles != null && (
+                <div className="info-item">
+                  <span className="info-label">Match distance</span>
+                  <span className="info-value">
+                    {profile.matchDistanceMiles} miles
+                  </span>
+                </div>
+              )}
+            </div>
+          </section>
+
+          <section className="profile-card bio-section">
+            <h3 className="profile-section-title">About Me</h3>
+            <p className="bio-text">
+              {profile.bio || "No bio added yet."}
             </p>
           </section>
 
-          <div className="info-grid">
-            <div className="info-item">
-              <strong>Gender:</strong> {formatEnum(profile.gender)}
-            </div>
-            <div className="info-item">
-              <strong>Interested in:</strong> {formatEnum(profile.interestedIn)}
-            </div>
-            <div className="info-item">
-              <strong>Goals:</strong> {formatEnum(profile.relationshipGoal)}
-            </div>
-            <div className="info-item">
-              <strong>Birth Date:</strong> {profile.birthDate}
-            </div>
-          </div>
-
-          <div className="profile-view-actions">
-            <button
-              className="secondary-action-button"
-              onClick={() => setIsGalleryOpen(true)}
-            >
-              View Photo Gallery
-            </button>
-          </div>
-
-          {isGalleryOpen && (
-            <div
-              className="modal-backdrop"
-              role="dialog"
-              aria-modal="true"
-              onClick={() => setIsGalleryOpen(false)}
-            >
-              <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                  <h3 id="photo-gallery-title">Photo Gallery</h3>
-                  <button
-                    className="modal-close-button"
-                    onClick={() => setIsGalleryOpen(false)}
-                  >
-                    ×
-                  </button>
-                </div>
-                {photos.length > 0 ? (
-                  <div className="photo-gallery-grid">
-                    {photos.map((photo, index) => (
-                      <div
-                        className="photo-gallery-card"
-                        key={`${photo}-${index}`}
-                      >
-                        <img src={photo} alt={`Profile photo ${index + 1}`} />
-                      </div>
-                    ))}
+          <section className="profile-card adventures-section">
+            <h3 className="profile-section-title">Adventure Interests</h3>
+            {profile.adventures?.length > 0 ? (
+              <div className="adventure-tags">
+                {profile.adventures.map(({ adventureType, skillLevel }) => (
+                  <div className="adventure-tag" key={adventureType}>
+                    <span className="adventure-tag-name">
+                      {formatEnum(adventureType)}
+                    </span>
+                    <span className="adventure-tag-skill">
+                      {formatEnum(skillLevel)}
+                    </span>
                   </div>
-                ) : (
-                  <p className="helper-text">No photos have been added yet.</p>
-                )}
+                ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <p className="profile-empty-state">
+                No adventure interests added yet.
+              </p>
+            )}
+          </section>
 
           {(profile.instagramUrl || profile.facebookUrl || profile.xUrl) && (
-            <section className="social-links-section">
-              <h3>Social Links</h3>
+            <section className="profile-card social-links-section">
+              <h3 className="profile-section-title">Social Links</h3>
               <div className="social-links">
                 {profile.instagramUrl && (
                   <a
@@ -288,27 +294,67 @@ function ProfileManager() {
             </section>
           )}
 
-          <section className="bio-section">
-            <h3>About Me</h3>
-            <p className="bio-text">{profile.bio}</p>
+          <section className="profile-card profile-photos-section">
+            <h3 className="profile-section-title">Photos</h3>
+            {photos.length > 0 ? (
+              <p className="profile-photo-count">
+                {photos.length} photo{photos.length === 1 ? "" : "s"} on your
+                profile
+              </p>
+            ) : (
+              <p className="profile-empty-state">
+                No photos have been added yet.
+              </p>
+            )}
+            <div className="profile-view-actions">
+              <button
+                type="button"
+                className="secondary-action-button"
+                onClick={() => setIsGalleryOpen(true)}
+              >
+                View Photo Gallery
+              </button>
+            </div>
           </section>
 
-          {profile.adventures?.length > 0 && (
-            <section className="adventures-section">
-              <h3>Adventure Interests</h3>
-              <div className="adventure-tags">
-                {profile.adventures.map(({ adventureType, skillLevel }) => (
-                  <div className="adventure-tag" key={adventureType}>
-                    <span className="adventure-tag-name">
-                      {formatEnum(adventureType)}
-                    </span>
-                    <span className="adventure-tag-skill">
-                      {formatEnum(skillLevel)}
-                    </span>
+          {isGalleryOpen && (
+            <div
+              className="modal-backdrop"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="photo-gallery-title"
+              onClick={() => setIsGalleryOpen(false)}
+            >
+              <div className="modal-card photo-gallery-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3 id="photo-gallery-title">Photo Gallery</h3>
+                  <button
+                    type="button"
+                    className="modal-close-button"
+                    onClick={() => setIsGalleryOpen(false)}
+                    aria-label="Close photo gallery"
+                  >
+                    ×
+                  </button>
+                </div>
+                {photos.length > 0 ? (
+                  <div className="photo-gallery-grid">
+                    {photos.map((photo, index) => (
+                      <div
+                        className="photo-gallery-card"
+                        key={`${photo}-${index}`}
+                      >
+                        <img src={photo} alt={`Profile photo ${index + 1}`} />
+                      </div>
+                    ))}
                   </div>
-                ))}
+                ) : (
+                  <p className="profile-empty-state">
+                    No photos have been added yet.
+                  </p>
+                )}
               </div>
-            </section>
+            </div>
           )}
 
           <Link className="matches-cta" to="/matches">
@@ -329,6 +375,7 @@ function ProfileManager() {
                 <div className="modal-header">
                   <h3>Messages</h3>
                   <button
+                    type="button"
                     className="modal-close-button"
                     onClick={() => setIsChatOpen(false)}
                   >
@@ -344,6 +391,7 @@ function ProfileManager() {
                       chatUsers.map((userIdValue) => (
                         <button
                           key={userIdValue}
+                          type="button"
                           className={`chat-user-button ${selectedUserId === userIdValue ? "chat-user-button--active" : ""}`}
                           onClick={() => setSelectedUserId(userIdValue)}
                         >
@@ -390,7 +438,13 @@ function ProfileManager() {
           )}
 
           <div className="profile-view-actions">
-            <button onClick={() => setIsEditing(true)}>Edit Profile</button>
+            <button
+              type="button"
+              className="secondary-action-button"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit Profile
+            </button>
           </div>
         </div>
       ) : (
