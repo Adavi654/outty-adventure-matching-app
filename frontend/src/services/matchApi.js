@@ -25,3 +25,31 @@ export async function getPotentialMatches(userId, token) {
 
   return response.json();
 }
+
+export async function sendSwipeDecision(userId, targetId, decision, token) {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch(
+    `${API_BASE_URL}/matches/${userId}/swipe`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ targetId, decision }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    const requestError = new Error(errorText);
+    requestError.status = response.status;
+    throw requestError;
+  }
+
+  return response.json();
+}
