@@ -10,7 +10,7 @@ During the course of Sprint 2, because everyone in our team was fully present an
 
 With our performance during Sprint 2 in mind, we opted to use our established velocity of 34 points as our baseline when calculating using Yesterday's Weather. Our team is projected to once again be operating at 100% capacity throughout the course of Sprint 3. Therefore, no adjustments are required for team availability. This means that our targeted points should be the product of 34 points and 100%, resulting in a workload of 34 target points once again.
 
-This will be our final sprint for this project, and therefore our final, normalized velocity for this team.
+This will be our final sprint for this project, and the completed story points from Sprint 3 will establish this team's final measured velocity.
 
 _________________________
 
