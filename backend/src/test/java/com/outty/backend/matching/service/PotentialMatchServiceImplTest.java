@@ -402,6 +402,210 @@ class PotentialMatchServiceImplTest {
     }
 
     @Test
+    void shouldReturnFallbackMatchesRespectingGenderPreference() {
+        requester.setInterestedIn(InterestedIn.WOMEN);
+        requester.setMatchDistanceMiles(100);
+
+        PotentialMatchResponse femaleFallbackCandidate = candidate(
+                2L,
+                "Casey",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.RELATIONSHIPS,
+                List.of(
+                        new AdventurePreferenceResponse(
+                                AdventureType.KAYAKING,
+                                SkillLevel.ADVANCED
+                        )
+                ),
+                20,
+                "Female"
+        );
+        PotentialMatchResponse maleFallbackCandidate = candidate(
+                3L,
+                "Jordan",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.RELATIONSHIPS,
+                List.of(
+                        new AdventurePreferenceResponse(
+                                AdventureType.KAYAKING,
+                                SkillLevel.ADVANCED
+                        )
+                ),
+                20,
+                "Male"
+        );
+
+        when(profileRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(requester));
+        when(potentialMatchProvider.getCandidates())
+                .thenReturn(List.of(femaleFallbackCandidate, maleFallbackCandidate));
+
+        List<PotentialMatchResponse> matches =
+                potentialMatchService.getPotentialMatches(USER_ID);
+
+        assertEquals(List.of(2L), matches.stream()
+                .map(PotentialMatchResponse::userId)
+                .toList());
+    }
+
+    @Test
+    void shouldReturnOnlyFemaleCandidatesWhenRequesterInterestedInWomen() {
+        requester.setInterestedIn(InterestedIn.WOMEN);
+
+        PotentialMatchResponse femaleCandidate = candidate(
+                2L,
+                "Casey",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                "Female"
+        );
+        PotentialMatchResponse maleCandidate = candidate(
+                3L,
+                "Jordan",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                "Male"
+        );
+        PotentialMatchResponse nonBinaryCandidate = candidate(
+                4L,
+                "Avery",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                "Non-binary"
+        );
+
+        when(profileRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(requester));
+        when(potentialMatchProvider.getCandidates())
+                .thenReturn(List.of(femaleCandidate, maleCandidate, nonBinaryCandidate));
+
+        List<PotentialMatchResponse> matches =
+                potentialMatchService.getPotentialMatches(USER_ID);
+
+        assertEquals(List.of(2L), matches.stream()
+                .map(PotentialMatchResponse::userId)
+                .toList());
+    }
+
+    @Test
+    void shouldReturnOnlyMaleCandidatesWhenRequesterInterestedInMen() {
+        requester.setInterestedIn(InterestedIn.MEN);
+
+        PotentialMatchResponse femaleCandidate = candidate(
+                2L,
+                "Casey",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                "Female"
+        );
+        PotentialMatchResponse maleCandidate = candidate(
+                3L,
+                "Jordan",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                "Male"
+        );
+        PotentialMatchResponse preferNotCandidate = candidate(
+                4L,
+                "Taylor",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                "Prefer not to say"
+        );
+
+        when(profileRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(requester));
+        when(potentialMatchProvider.getCandidates())
+                .thenReturn(List.of(femaleCandidate, maleCandidate, preferNotCandidate));
+
+        List<PotentialMatchResponse> matches =
+                potentialMatchService.getPotentialMatches(USER_ID);
+
+        assertEquals(List.of(3L), matches.stream()
+                .map(PotentialMatchResponse::userId)
+                .toList());
+    }
+
+    @Test
+    void shouldReturnMaleAndFemaleCandidatesWhenRequesterInterestedInBoth() {
+        requester.setInterestedIn(InterestedIn.BOTH);
+
+        PotentialMatchResponse femaleCandidate = candidate(
+                2L,
+                "Casey",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                "Female"
+        );
+        PotentialMatchResponse maleCandidate = candidate(
+                3L,
+                "Jordan",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                "Male"
+        );
+        PotentialMatchResponse nonBinaryCandidate = candidate(
+                4L,
+                "Avery",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                "Non-binary"
+        );
+
+        when(profileRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(requester));
+        when(potentialMatchProvider.getCandidates())
+                .thenReturn(List.of(femaleCandidate, maleCandidate, nonBinaryCandidate));
+
+        List<PotentialMatchResponse> matches =
+                potentialMatchService.getPotentialMatches(USER_ID);
+
+        assertEquals(List.of(2L, 3L), matches.stream()
+                .map(PotentialMatchResponse::userId)
+                .toList());
+    }
+
+    @Test
     void shouldReturnEmptyListWhenNoCandidatesQualify() {
         when(profileRepository.findByUserId(USER_ID))
                 .thenReturn(Optional.of(requester));
@@ -455,7 +659,7 @@ class PotentialMatchServiceImplTest {
             RelationshipGoal relationshipGoal,
             List<AdventurePreferenceResponse> adventures
     ) {
-        return candidate(userId, firstName, city, state, country, relationshipGoal, adventures, null);
+        return candidate(userId, firstName, city, state, country, relationshipGoal, adventures, null, "Male");
     }
 
     private PotentialMatchResponse candidate(
@@ -468,6 +672,20 @@ class PotentialMatchServiceImplTest {
             List<AdventurePreferenceResponse> adventures,
             Integer distanceMiles
     ) {
+        return candidate(userId, firstName, city, state, country, relationshipGoal, adventures, distanceMiles, "Male");
+    }
+
+    private PotentialMatchResponse candidate(
+            Long userId,
+            String firstName,
+            String city,
+            String state,
+            String country,
+            RelationshipGoal relationshipGoal,
+            List<AdventurePreferenceResponse> adventures,
+            Integer distanceMiles,
+            String gender
+    ) {
         return new PotentialMatchResponse(
                 userId,
                 firstName,
@@ -475,7 +693,7 @@ class PotentialMatchServiceImplTest {
                 city,
                 state,
                 country,
-                "Prefer not to say",
+                gender,
                 LocalDate.of(1990, 1, 1),
                 "Demo bio",
                 InterestedIn.BOTH,
