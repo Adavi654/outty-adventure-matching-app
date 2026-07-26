@@ -29,5 +29,5 @@ _________________________
 - Annotated Scrum Evidence: In Git repository under Sprint_3/Annotated_Scrum
 - Mobbing Evidence: In Git repository under Sprint_3/Mobbing
 - Sprint Review: In Git repository under Sprint_3/Sprint_Review
-- 3 Passed BDD and 30 Passed Unit Tests: In Git repository under Sprint_3/Passed_Tests
+- 3 Passed BDD and 32 Passed Unit Tests: In Git repository under Sprint_3/Passed_Tests
 - Working Application: https://outty-adventure-matching-app.onrender.com
