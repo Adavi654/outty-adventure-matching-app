@@ -7,7 +7,6 @@ import {
   updateProfile,
 } from "../services/profileApi";
 import {
-  getChatUsers,
   getMatches,
   getMessages,
   sendMessage,
