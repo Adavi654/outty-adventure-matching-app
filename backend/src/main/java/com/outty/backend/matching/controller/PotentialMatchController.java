@@ -2,6 +2,7 @@ package com.outty.backend.matching.controller;
 
 import com.outty.backend.matching.dto.response.PotentialMatchResponse;
 import com.outty.backend.matching.service.PotentialMatchService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

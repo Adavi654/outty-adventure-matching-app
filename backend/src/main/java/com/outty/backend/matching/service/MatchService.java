@@ -7,6 +7,11 @@ import com.outty.backend.matching.entity.enums.InteractionType;
 import com.outty.backend.matching.repository.UserInteractionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.outty.backend.profile.repository.ProfileRepository; 
+import com.outty.backend.profile.entity.Profile;
+
+import java.util.Locale;
+import java.util.List;
 
 @Service
 public class MatchService {
@@ -19,16 +24,25 @@ public class MatchService {
 
     @Transactional
     public SwipeResponse processSwipe(Long actorId, SwipeRequest request) {
-        InteractionType decisionType = InteractionType.valueOf(request.decision().toUpperCase());
+        if (request == null || request.targetId() == null) {
+            throw new IllegalArgumentException("Target ID cannot be null");
+        }
+
+        InteractionType decisionType = parseInteractionType(request.decision());
 
         UserInteraction interaction = interactionRepository
             .findByActorIdAndTargetId(actorId, request.targetId())
-            .orElseGet(() -> new UserInteraction(actorId, request.targetId(), decisionType));
+            .orElse(null);
 
-        interaction.setDecision(decisionType);
-        interactionRepository.save(interaction);
+        if (interaction == null) {
+            interaction = new UserInteraction(actorId, request.targetId(), decisionType);
+        } else {
+            interaction.setDecision(decisionType);
+        }
 
-        if (decisionType == InteractionType.REJECT) {
+        interactionRepository.saveAndFlush(interaction);
+
+        if (decisionType != InteractionType.INTERESTED) {
             return new SwipeResponse(false, null);
         }
 
@@ -39,5 +53,20 @@ public class MatchService {
         );
 
         return new SwipeResponse(isMutualMatch, isMutualMatch ? request.targetId() : null);
+    }
+
+    private InteractionType parseInteractionType(String rawDecision) {
+        if (rawDecision == null) return InteractionType.REJECT;
+
+        String norm = rawDecision.trim().toUpperCase(Locale.ROOT);
+        return switch (norm) {
+            case "INTERESTED", "LIKE", "YES", "RIGHT" -> InteractionType.INTERESTED;
+            default -> InteractionType.REJECT;
+        };
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> getMatchedUserIds(Long userId) {
+        return interactionRepository.findMutualMatchUserIds(userId);
     }
 }

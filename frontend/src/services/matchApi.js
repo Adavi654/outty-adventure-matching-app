@@ -53,3 +53,18 @@ export async function sendSwipeDecision(userId, targetId, decision, token) {
 
   return response.json();
 }
+
+export async function getMatches(userId, token) {
+  const response = await fetch(`${API_BASE_URL}/${userId}/matches`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch matches");
+  }
+
+  return response.json(); // returns array of matched user IDs e.g. [2, 5, 8]
+}
