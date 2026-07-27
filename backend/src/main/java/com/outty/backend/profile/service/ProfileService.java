@@ -4,6 +4,8 @@ import com.outty.backend.profile.dto.request.ProfileRequest;
 import com.outty.backend.profile.dto.response.ProfileResponse;
 import com.outty.backend.profile.dto.request.UpdateProfileRequest;
 
+import java.util.List;
+
 public interface ProfileService {
     ProfileResponse createProfile(Long userId, ProfileRequest request);
 

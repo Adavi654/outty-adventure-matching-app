@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -35,18 +37,32 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
         Profile requester = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ProfileNotFoundException("Profile not found"));
 
-        List<PotentialMatchResponse> candidates;
+        List<PotentialMatchResponse> allCandidates = new ArrayList<>();
+
+        List<PotentialMatchResponse> dbCandidates = profileRepository.findAll().stream()
+                .filter(profile -> profile.getUser() != null && !Objects.equals(profile.getUser().getId(), userId))
+                .map(this::mapProfileToPotentialMatchResponse)
+                .toList();
+
+        allCandidates.addAll(dbCandidates);
+
+        Set<Long> existingUserIds = dbCandidates.stream()
+                .map(PotentialMatchResponse::userId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
 
         try {
-            candidates = potentialMatchProvider.getCandidates();
-        } catch (RuntimeException ex) {
-            throw new PotentialMatchUnavailableException(
-                    "Potential matches are temporarily unavailable",
-                    ex
-            );
-        }
+            List<PotentialMatchResponse> mockCandidates = potentialMatchProvider.getCandidates();
+            if (mockCandidates != null) {
+                for (PotentialMatchResponse mock : mockCandidates) {
+                    if (!Objects.equals(mock.userId(), userId) && !existingUserIds.contains(mock.userId())) {
+                        allCandidates.add(mock);
+                    }
+                }
+            }
+        } catch (RuntimeException ex) {}
 
-        List<PotentialMatchResponse> strictMatches = candidates.stream()
+        return allCandidates.stream()
                 .filter(candidate -> !Objects.equals(candidate.userId(), userId))
                 .filter(candidate -> isWithinRequestedDistance(requester, candidate))
                 .filter(candidate -> hasMatchingCountry(requester, candidate))
@@ -58,40 +74,49 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                         requester.getInterestedIn(),
                         candidate.gender()
                 ))
-                .filter(candidate -> sharesAdventureInterest(requester, candidate))
                 .sorted(
                         Comparator
-                                .comparingInt(
-                                        (PotentialMatchResponse candidate) ->
-                                                geographicRank(requester, candidate)
-                                )
+                                .comparing((PotentialMatchResponse candidate) -> sharesAdventureInterest(requester, candidate), Comparator.reverseOrder())
+                                .thenComparingInt(candidate -> geographicRank(requester, candidate))
                                 .thenComparing(PotentialMatchResponse::userId)
                 )
+                .limit(20)
                 .toList();
+    }
 
-        if (!strictMatches.isEmpty()) {
-            return strictMatches;
+    private PotentialMatchResponse mapProfileToPotentialMatchResponse(Profile profile) {
+        String firstPhotoUrl = null;
+        if (profile.getPhotos() != null && !profile.getPhotos().isEmpty()) {
+            firstPhotoUrl = profile.getPhotos().get(0);
         }
 
-        return candidates.stream()
-                .filter(candidate -> !Objects.equals(candidate.userId(), userId))
-                .filter(candidate -> isWithinRequestedDistance(requester, candidate))
-                .filter(candidate -> hasMatchingCountry(requester, candidate)
-                        || sameValue(requester.getCity(), candidate.city())
-                        || sameValue(requester.getState(), candidate.state()))
-                .filter(candidate -> matchesRequesterGenderPreference(
-                        requester.getInterestedIn(),
-                        candidate.gender()
+        return new PotentialMatchResponse(
+                profile.getUser() != null ? profile.getUser().getId() : profile.getId(),
+                profile.getUser().getFirstName(),
+                firstPhotoUrl,
+                profile.getCity(),
+                profile.getState(),
+                profile.getCountry(),
+                profile.getGender() != null ? profile.getGender().name() : null,
+                profile.getBirthDate(),
+                profile.getBio(),
+                profile.getInterestedIn(),
+                profile.getRelationshipGoal(),
+                mapAdventuresToResponse(profile),
+                profile.getMatchDistanceMiles(),
+                false
+        );
+    }
+
+    private List<AdventurePreferenceResponse> mapAdventuresToResponse(Profile profile) {
+        if (profile.getAdventures() == null) {
+            return List.of();
+        }
+        return profile.getAdventures().stream()
+                .map(adv -> new AdventurePreferenceResponse(
+                        adv.getAdventureType(),
+                        adv.getSkillLevel()
                 ))
-                .sorted(
-                        Comparator
-                                .comparingInt(
-                                        (PotentialMatchResponse candidate) ->
-                                                geographicRank(requester, candidate)
-                                )
-                                .thenComparing(PotentialMatchResponse::userId)
-                )
-                .limit(5)
                 .toList();
     }
 
@@ -102,7 +127,7 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
         }
 
         if (candidate.distanceMiles() == null) {
-            return false;
+            return true;
         }
 
         return candidate.distanceMiles() <= requestedDistance;
@@ -146,7 +171,7 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
 
         Gender gender = parseCandidateGender(candidateGender);
         if (gender == null) {
-            return false;
+            return true;
         }
 
         return switch (requesterPreference) {
@@ -188,7 +213,7 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
         }
 
         if (requesterAdventures.isEmpty()) {
-            return false;
+            return true;
         }
 
         if (candidate.adventures() == null || candidate.adventures().isEmpty()) {

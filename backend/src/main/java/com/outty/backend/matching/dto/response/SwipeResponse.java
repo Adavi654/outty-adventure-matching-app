@@ -1,6 +1,8 @@
 package com.outty.backend.matching.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public record SwipeResponse(
-    boolean isMatch,
+    @JsonProperty("isMatch") boolean isMatch,
     Long matchedUserId
 ) {}

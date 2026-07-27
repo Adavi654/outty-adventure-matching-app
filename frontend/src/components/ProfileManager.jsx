@@ -6,7 +6,12 @@ import {
   createProfile,
   updateProfile,
 } from "../services/profileApi";
-import { getChatUsers, getMessages, sendMessage } from "../services/messageApi";
+import {
+  getChatUsers,
+  getMatches,
+  getMessages,
+  sendMessage,
+} from "../services/messageApi";
 import { formatEnum } from "../utils/formatters";
 
 function ProfileManager() {
@@ -56,8 +61,10 @@ function ProfileManager() {
 
     const loadChatUsers = async () => {
       try {
-        const users = await getChatUsers(userId, token);
+        // SWAP: Call getMatches instead of getChatUsers
+        const users = await getMatches(userId, token);
         setChatUsers(users);
+
         if (!selectedUserId && users.length > 0) {
           setSelectedUserId(users[0]);
         }
@@ -78,7 +85,7 @@ function ProfileManager() {
 
         setChatUserNames(Object.fromEntries(resolvedNames));
       } catch (err) {
-        setChatError("Unable to load chat partners. {}", err);
+        setChatError("Unable to load chat partners.");
       }
     };
 

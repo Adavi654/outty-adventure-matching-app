@@ -104,7 +104,7 @@ function PotentialMatches() {
 
     if (currentMatch) {
       try {
-        const targetId = currentMatch.id || currentMatch.userId
+        const targetId = currentMatch.userId || currentMatch.id;
         const response = await sendSwipeDecision(
           userId,
           targetId,
