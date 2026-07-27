@@ -3,6 +3,7 @@ package com.outty.backend.matching.provider;
 import com.outty.backend.matching.dto.response.PotentialMatchResponse;
 import com.outty.backend.profile.dto.response.AdventurePreferenceResponse;
 import com.outty.backend.profile.entity.enums.AdventureType;
+import com.outty.backend.profile.entity.enums.Gender;
 import com.outty.backend.profile.entity.enums.InterestedIn;
 import com.outty.backend.profile.entity.enums.RelationshipGoal;
 import com.outty.backend.profile.entity.enums.SkillLevel;
@@ -22,7 +23,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Marietta",
                     "Georgia",
                     "US",
-                    "Non-binary",
+                    Gender.NONBINARY,
                     LocalDate.of(1992, 4, 15),
                     "Weekend hiker who enjoys discovering new trails.",
                     InterestedIn.BOTH,
@@ -41,7 +42,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Kennesaw",
                     "Georgia",
                     "US",
-                    "Male",
+                    Gender.MALE,
                     LocalDate.of(1989, 8, 22),
                     "Kayaking enthusiast and occasional camper.",
                     InterestedIn.WOMEN,
@@ -60,7 +61,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Denver",
                     "Colorado",
                     "US",
-                    "Female",
+                    Gender.FEMALE,
                     LocalDate.of(1994, 2, 10),
                     "Always ready for a scenic hike or weekend road trip.",
                     InterestedIn.MEN,
@@ -79,7 +80,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Toronto",
                     "Ontario",
                     "Canada",
-                    "Prefer not to say",
+                    Gender.PREFERNOT,
                     null,
                     "Nature photographer who enjoys exploring national parks.",
                     InterestedIn.BOTH,
@@ -98,7 +99,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Athens",
                     "Georgia",
                     "US",
-                    "Male",
+                    Gender.MALE,
                     LocalDate.of(1991, 11, 5),
                     "Trail runner looking for someone to share new experiences.",
                     InterestedIn.MEN,
@@ -117,7 +118,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Marietta",
                     "Georgia",
                     "US",
-                    "Female",
+                    Gender.FEMALE,
                     LocalDate.of(1990, 6, 18),
                     "Coffee-fueled climber who loves weekend trail adventures.",
                     InterestedIn.BOTH,
@@ -136,7 +137,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Atlanta",
                     "Georgia",
                     "US",
-                    "Male",
+                    Gender.MALE,
                     LocalDate.of(1987, 1, 9),
                     "Outdoor photographer looking for a hiking buddy and new memories.",
                     InterestedIn.BOTH,
@@ -155,7 +156,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Macon",
                     "Georgia",
                     "US",
-                    "Male",
+                    Gender.MALE,
                     LocalDate.of(1993, 9, 2),
                     "Camping and kayaking enthusiast who enjoys spontaneous road trips.",
                     InterestedIn.BOTH,
@@ -174,7 +175,7 @@ public class MockPotentialMatchProvider implements PotentialMatchProvider {
                     "Atlanta",
                     "Georgia",
                     "US",
-                    "Female",
+                    Gender.FEMALE,
                     LocalDate.of(1992, 3, 14),
                     "Weekend explorer who loves hiking, camping, and climbing with friends.",
                     InterestedIn.BOTH,

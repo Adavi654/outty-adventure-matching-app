@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -118,7 +117,7 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                 profile.getCity(),
                 profile.getState(),
                 profile.getCountry(),
-                profile.getGender() != null ? profile.getGender().name() : null,
+                profile.getGender(),
                 profile.getBirthDate(),
                 profile.getBio(),
                 profile.getInterestedIn(),
@@ -184,40 +183,20 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
 
     private boolean matchesRequesterGenderPreference(
             InterestedIn requesterPreference,
-            String candidateGender
+            Gender candidateGender
     ) {
         if (requesterPreference == null) {
             return true;
         }
 
-        Gender gender = parseCandidateGender(candidateGender);
-        if (gender == null) {
-            return true; // Allow null/unspecified gender to pass fallback and loose gender tests
+        if (candidateGender == null) {
+            return true;
         }
 
         return switch (requesterPreference) {
-            case WOMEN -> gender == Gender.FEMALE;
-            case MEN -> gender == Gender.MALE;
-            case BOTH -> gender == Gender.MALE || gender == Gender.FEMALE;
-        };
-    }
-
-    private Gender parseCandidateGender(String candidateGender) {
-        if (candidateGender == null || candidateGender.isBlank()) {
-            return null;
-        }
-
-        String normalized = candidateGender.trim()
-                .toUpperCase(Locale.ROOT)
-                .replace("-", "")
-                .replace(" ", "");
-
-        return switch (normalized) {
-            case "MALE" -> Gender.MALE;
-            case "FEMALE" -> Gender.FEMALE;
-            case "NONBINARY" -> Gender.NONBINARY;
-            case "PREFERNOT", "PREFERSNOTTOSAY" -> Gender.PREFERNOT;
-            default -> null;
+            case WOMEN -> candidateGender == Gender.FEMALE;
+            case MEN -> candidateGender == Gender.MALE;
+            case BOTH -> candidateGender == Gender.MALE || candidateGender == Gender.FEMALE;
         };
     }
 
