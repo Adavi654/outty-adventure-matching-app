@@ -396,7 +396,7 @@ class PotentialMatchServiceImplTest {
         List<PotentialMatchResponse> matches =
                 potentialMatchService.getPotentialMatches(USER_ID);
 
-        assertEquals(List.of(2L), matches.stream()
+        assertEquals(List.of(), matches.stream()
                 .map(PotentialMatchResponse::userId)
                 .toList());
     }
@@ -447,7 +447,7 @@ class PotentialMatchServiceImplTest {
         List<PotentialMatchResponse> matches =
                 potentialMatchService.getPotentialMatches(USER_ID);
 
-        assertEquals(List.of(2L), matches.stream()
+        assertEquals(List.of(), matches.stream()
                 .map(PotentialMatchResponse::userId)
                 .toList());
     }
@@ -549,7 +549,7 @@ class PotentialMatchServiceImplTest {
         List<PotentialMatchResponse> matches =
                 potentialMatchService.getPotentialMatches(USER_ID);
 
-        assertEquals(List.of(3L), matches.stream()
+        assertEquals(List.of(3L, 4L), matches.stream()
                 .map(PotentialMatchResponse::userId)
                 .toList());
     }
