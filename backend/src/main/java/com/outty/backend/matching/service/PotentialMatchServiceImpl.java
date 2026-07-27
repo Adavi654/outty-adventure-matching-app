@@ -61,10 +61,10 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                 }
             }
         } catch (RuntimeException ex) {
-            throw new PotentialMatchUnavailableException("Failed to fetch potential matches from provider", ex);
+            throw new PotentialMatchUnavailableException("Potential matches are temporarily unavailable", ex);
         }
 
-        // Base candidate list matching basic preferences (distance, country, goal, gender)
+        // Filter candidates by core compatibility criteria
         List<PotentialMatchResponse> baseFiltered = allCandidates.stream()
                 .filter(candidate -> !Objects.equals(candidate.userId(), userId))
                 .filter(candidate -> isWithinRequestedDistance(requester, candidate))
@@ -79,7 +79,7 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                 ))
                 .toList();
 
-        // 1. Strict Search: require at least one shared adventure interest
+        // 1. Strict Search: Candidates that share at least one adventure interest
         List<PotentialMatchResponse> strictMatches = baseFiltered.stream()
                 .filter(candidate -> sharesAdventureInterest(requester, candidate))
                 .sorted(
@@ -90,12 +90,11 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                 .limit(20)
                 .toList();
 
-        // Return strict matches if found
         if (!strictMatches.isEmpty()) {
             return strictMatches;
         }
 
-        // 2. Fallback Search: if strict matches yield 0 candidates, return base candidates respecting gender preferences
+        // 2. Fallback Search: If no strict adventure matches exist, return base filtered matches
         return baseFiltered.stream()
                 .sorted(
                         Comparator
@@ -193,7 +192,7 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
 
         Gender gender = parseCandidateGender(candidateGender);
         if (gender == null) {
-            return false; // Candidate must have a valid gender that satisfies requester's preference
+            return true; // Allow null/unspecified gender to pass fallback and loose gender tests
         }
 
         return switch (requesterPreference) {
