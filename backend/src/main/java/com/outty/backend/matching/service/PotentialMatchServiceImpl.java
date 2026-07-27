@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +23,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -60,9 +60,12 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                     }
                 }
             }
-        } catch (RuntimeException ex) {}
+        } catch (RuntimeException ex) {
+            throw new PotentialMatchUnavailableException("Failed to fetch potential matches from provider", ex);
+        }
 
-        return allCandidates.stream()
+        // Base candidate list matching basic preferences (distance, country, goal, gender)
+        List<PotentialMatchResponse> baseFiltered = allCandidates.stream()
                 .filter(candidate -> !Objects.equals(candidate.userId(), userId))
                 .filter(candidate -> isWithinRequestedDistance(requester, candidate))
                 .filter(candidate -> hasMatchingCountry(requester, candidate))
@@ -74,10 +77,29 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
                         requester.getInterestedIn(),
                         candidate.gender()
                 ))
+                .toList();
+
+        // 1. Strict Search: require at least one shared adventure interest
+        List<PotentialMatchResponse> strictMatches = baseFiltered.stream()
+                .filter(candidate -> sharesAdventureInterest(requester, candidate))
                 .sorted(
                         Comparator
-                                .comparing((PotentialMatchResponse candidate) -> sharesAdventureInterest(requester, candidate), Comparator.reverseOrder())
-                                .thenComparingInt(candidate -> geographicRank(requester, candidate))
+                                .comparingInt((PotentialMatchResponse candidate) -> geographicRank(requester, candidate))
+                                .thenComparing(PotentialMatchResponse::userId)
+                )
+                .limit(20)
+                .toList();
+
+        // Return strict matches if found
+        if (!strictMatches.isEmpty()) {
+            return strictMatches;
+        }
+
+        // 2. Fallback Search: if strict matches yield 0 candidates, return base candidates respecting gender preferences
+        return baseFiltered.stream()
+                .sorted(
+                        Comparator
+                                .comparingInt((PotentialMatchResponse candidate) -> geographicRank(requester, candidate))
                                 .thenComparing(PotentialMatchResponse::userId)
                 )
                 .limit(20)
@@ -92,7 +114,7 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
 
         return new PotentialMatchResponse(
                 profile.getUser() != null ? profile.getUser().getId() : profile.getId(),
-                profile.getUser().getFirstName(),
+                profile.getUser() != null ? profile.getUser().getFirstName() : null,
                 firstPhotoUrl,
                 profile.getCity(),
                 profile.getState(),
@@ -171,7 +193,7 @@ public class PotentialMatchServiceImpl implements PotentialMatchService {
 
         Gender gender = parseCandidateGender(candidateGender);
         if (gender == null) {
-            return true;
+            return false; // Candidate must have a valid gender that satisfies requester's preference
         }
 
         return switch (requesterPreference) {
