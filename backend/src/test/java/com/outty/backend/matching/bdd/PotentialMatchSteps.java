@@ -86,10 +86,10 @@ public class PotentialMatchSteps {
                 .role(Role.USER)
                 .enabled(true)
                 .build();
-
+    
         User savedUser = userRepository.save(user);
         testUserId = savedUser.getId();
-
+    
         Profile profile = Profile.builder()
                 .user(savedUser)
                 .city("Atlanta")
@@ -102,8 +102,43 @@ public class PotentialMatchSteps {
                 .relationshipGoal(RelationshipGoal.FRIENDSHIPS)
                 .adventures(new ArrayList<>())
                 .build();
-
+    
         profileRepository.save(profile);
+        
+        createCandidateUser("Candidate 1", RelationshipGoal.FRIENDSHIPS, AdventureType.HIKING, SkillLevel.INTERMEDIATE);
+        createCandidateUser("Candidate 2", RelationshipGoal.BOTH, AdventureType.HIKING, SkillLevel.BEGINNER);
+    }
+    
+    private void createCandidateUser(String name, RelationshipGoal goal, AdventureType adventureType, SkillLevel skillLevel) {
+        User candidateUser = userRepository.save(User.builder()
+                .firstName(name)
+                .lastName("Candidate")
+                .email("candidate-" + UUID.randomUUID() + "@example.com")
+                .password("not-used")
+                .role(Role.USER)
+                .enabled(true)
+                .build());
+    
+        Profile candidateProfile = Profile.builder()
+                .user(candidateUser)
+                .city("Atlanta")
+                .state("Georgia")
+                .country("United States")
+                .gender(Gender.FEMALE)
+                .birthDate(LocalDate.of(1996, 6, 20))
+                .bio("Candidate bio")
+                .interestedIn(InterestedIn.BOTH)
+                .relationshipGoal(goal)
+                .adventures(new ArrayList<>())
+                .build();
+    
+        candidateProfile.getAdventures().add(ProfileAdventure.builder()
+                .profile(candidateProfile)
+                .adventureType(adventureType)
+                .skillLevel(skillLevel)
+                .build());
+    
+        profileRepository.save(candidateProfile);
     }
 
     @Given("the user has relationship goal {string}")
