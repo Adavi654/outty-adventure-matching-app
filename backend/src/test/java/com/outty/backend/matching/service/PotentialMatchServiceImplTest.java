@@ -9,6 +9,7 @@ import com.outty.backend.profile.dto.response.AdventurePreferenceResponse;
 import com.outty.backend.profile.entity.Profile;
 import com.outty.backend.profile.entity.ProfileAdventure;
 import com.outty.backend.profile.entity.enums.AdventureType;
+import com.outty.backend.profile.entity.enums.Gender;
 import com.outty.backend.profile.entity.enums.InterestedIn;
 import com.outty.backend.profile.entity.enums.RelationshipGoal;
 import com.outty.backend.profile.entity.enums.SkillLevel;
@@ -420,7 +421,7 @@ class PotentialMatchServiceImplTest {
                         )
                 ),
                 20,
-                "Female"
+                Gender.FEMALE
         );
         PotentialMatchResponse maleFallbackCandidate = candidate(
                 3L,
@@ -436,7 +437,7 @@ class PotentialMatchServiceImplTest {
                         )
                 ),
                 20,
-                "Male"
+                Gender.MALE
         );
 
         when(profileRepository.findByUserId(USER_ID))
@@ -465,7 +466,7 @@ class PotentialMatchServiceImplTest {
                 RelationshipGoal.FRIENDSHIPS,
                 defaultAdventures(),
                 null,
-                "Female"
+                Gender.FEMALE
         );
         PotentialMatchResponse maleCandidate = candidate(
                 3L,
@@ -476,7 +477,7 @@ class PotentialMatchServiceImplTest {
                 RelationshipGoal.FRIENDSHIPS,
                 defaultAdventures(),
                 null,
-                "Male"
+                Gender.MALE
         );
         PotentialMatchResponse nonBinaryCandidate = candidate(
                 4L,
@@ -487,7 +488,7 @@ class PotentialMatchServiceImplTest {
                 RelationshipGoal.FRIENDSHIPS,
                 defaultAdventures(),
                 null,
-                "Non-binary"
+                Gender.NONBINARY
         );
 
         when(profileRepository.findByUserId(USER_ID))
@@ -516,7 +517,7 @@ class PotentialMatchServiceImplTest {
                 RelationshipGoal.FRIENDSHIPS,
                 defaultAdventures(),
                 null,
-                "Female"
+                Gender.FEMALE
         );
         PotentialMatchResponse maleCandidate = candidate(
                 3L,
@@ -527,7 +528,7 @@ class PotentialMatchServiceImplTest {
                 RelationshipGoal.FRIENDSHIPS,
                 defaultAdventures(),
                 null,
-                "Male"
+                Gender.MALE
         );
         PotentialMatchResponse preferNotCandidate = candidate(
                 4L,
@@ -538,7 +539,7 @@ class PotentialMatchServiceImplTest {
                 RelationshipGoal.FRIENDSHIPS,
                 defaultAdventures(),
                 null,
-                "Prefer not to say"
+                Gender.PREFERNOT
         );
 
         when(profileRepository.findByUserId(USER_ID))
@@ -549,7 +550,7 @@ class PotentialMatchServiceImplTest {
         List<PotentialMatchResponse> matches =
                 potentialMatchService.getPotentialMatches(USER_ID);
 
-        assertEquals(List.of(3L, 4L), matches.stream()
+        assertEquals(List.of(3L), matches.stream()
                 .map(PotentialMatchResponse::userId)
                 .toList());
     }
@@ -567,7 +568,7 @@ class PotentialMatchServiceImplTest {
                 RelationshipGoal.FRIENDSHIPS,
                 defaultAdventures(),
                 null,
-                "Female"
+                Gender.FEMALE
         );
         PotentialMatchResponse maleCandidate = candidate(
                 3L,
@@ -578,7 +579,7 @@ class PotentialMatchServiceImplTest {
                 RelationshipGoal.FRIENDSHIPS,
                 defaultAdventures(),
                 null,
-                "Male"
+                Gender.MALE
         );
         PotentialMatchResponse nonBinaryCandidate = candidate(
                 4L,
@@ -589,7 +590,7 @@ class PotentialMatchServiceImplTest {
                 RelationshipGoal.FRIENDSHIPS,
                 defaultAdventures(),
                 null,
-                "Non-binary"
+                Gender.NONBINARY
         );
 
         when(profileRepository.findByUserId(USER_ID))
@@ -601,6 +602,35 @@ class PotentialMatchServiceImplTest {
                 potentialMatchService.getPotentialMatches(USER_ID);
 
         assertEquals(List.of(2L, 3L), matches.stream()
+                .map(PotentialMatchResponse::userId)
+                .toList());
+    }
+
+    @Test
+    void shouldNotCrashWhenCandidateGenderUsesDisplayValue() {
+        requester.setInterestedIn(InterestedIn.MEN);
+
+        PotentialMatchResponse maleFromDisplay = candidate(
+                2L,
+                "Jordan",
+                "Atlanta",
+                "Georgia",
+                "United States",
+                RelationshipGoal.FRIENDSHIPS,
+                defaultAdventures(),
+                null,
+                Gender.fromJson("Male")
+        );
+
+        when(profileRepository.findByUserId(USER_ID))
+                .thenReturn(Optional.of(requester));
+        when(potentialMatchProvider.getCandidates())
+                .thenReturn(List.of(maleFromDisplay));
+
+        List<PotentialMatchResponse> matches =
+                potentialMatchService.getPotentialMatches(USER_ID);
+
+        assertEquals(List.of(2L), matches.stream()
                 .map(PotentialMatchResponse::userId)
                 .toList());
     }
@@ -659,7 +689,7 @@ class PotentialMatchServiceImplTest {
             RelationshipGoal relationshipGoal,
             List<AdventurePreferenceResponse> adventures
     ) {
-        return candidate(userId, firstName, city, state, country, relationshipGoal, adventures, null, "Male");
+        return candidate(userId, firstName, city, state, country, relationshipGoal, adventures, null, Gender.MALE);
     }
 
     private PotentialMatchResponse candidate(
@@ -672,7 +702,7 @@ class PotentialMatchServiceImplTest {
             List<AdventurePreferenceResponse> adventures,
             Integer distanceMiles
     ) {
-        return candidate(userId, firstName, city, state, country, relationshipGoal, adventures, distanceMiles, "Male");
+        return candidate(userId, firstName, city, state, country, relationshipGoal, adventures, distanceMiles, Gender.MALE);
     }
 
     private PotentialMatchResponse candidate(
@@ -684,7 +714,7 @@ class PotentialMatchServiceImplTest {
             RelationshipGoal relationshipGoal,
             List<AdventurePreferenceResponse> adventures,
             Integer distanceMiles,
-            String gender
+            Gender gender
     ) {
         return new PotentialMatchResponse(
                 userId,
