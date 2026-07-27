@@ -83,8 +83,7 @@ function ProfileManager() {
         );
 
         setChatUserNames(Object.fromEntries(resolvedNames));
-      } catch (err) {
-        err = null;
+      } catch {
         setChatError("Unable to load chat partners.");
       }
     };
